@@ -1,4 +1,4 @@
-package springrender.rendering;
+package springrender.engine.rendering;
 
 import javax.swing.JPanel;
 import java.awt.Dimension;
