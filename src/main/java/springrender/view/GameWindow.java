@@ -9,7 +9,9 @@ public class GameWindow {
         gameWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         gameWindow.setResizable(true);
         gameWindow.setTitle("Test Title");
-
+        GamePanel gamePanel = new GamePanel();
+        gameWindow.add(gamePanel);
+        gameWindow.pack();
         gameWindow.setLocationRelativeTo(null);
         gameWindow.setVisible(true);
 

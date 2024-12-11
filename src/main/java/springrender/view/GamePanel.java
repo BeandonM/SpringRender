@@ -1,6 +1,8 @@
 package springrender.view;
 
 import javax.swing.JPanel;
+import java.awt.Dimension;
+import java.awt.Color;
 
 public class GamePanel extends JPanel {
 
@@ -12,4 +14,9 @@ public class GamePanel extends JPanel {
     private int screenWidth = tileSize * maxScreenWidthMulti;
     private int screenHeight = tileSize * maxScreenHeightMulti;
 
+    public GamePanel() {
+        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+        this.setBackground(Color.BLACK);
+        this.setDoubleBuffered(true);
+    }
 }
