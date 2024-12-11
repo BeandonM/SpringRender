@@ -1,8 +1,10 @@
-package springrender.view;
+package springrender.rendering;
 
 import javax.swing.JPanel;
 import java.awt.Dimension;
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.logging.Logger;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -33,7 +35,26 @@ public class GamePanel extends JPanel implements Runnable {
     @Override
     public void run() {
         while (gameThread != null) {
-            logger.info("Thread");
+            //logger.info("Thread");
+            update();
+            repaint();
         }
+    }
+
+    public void update() {
+
+    }
+
+    @Override
+    public void paintComponent(Graphics graphic) {
+        super.paintComponent(graphic);
+
+        Graphics2D graphics2D = (Graphics2D) graphic;
+
+        graphics2D.setColor(Color.white);
+
+        graphics2D.fillRect(100, 100, TILE_SIZE, TILE_SIZE);
+
+        graphics2D.dispose();
     }
 }

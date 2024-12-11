@@ -1,4 +1,4 @@
-package springrender.view;
+package springrender.rendering;
 
 import javax.swing.*;
 
