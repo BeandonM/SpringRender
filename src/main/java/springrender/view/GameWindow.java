@@ -11,6 +11,7 @@ public class GameWindow {
         gameWindow.setTitle("Test Title");
         GamePanel gamePanel = new GamePanel();
         gameWindow.add(gamePanel);
+        gamePanel.startGameThread();
         gameWindow.pack();
         gameWindow.setLocationRelativeTo(null);
         gameWindow.setVisible(true);
