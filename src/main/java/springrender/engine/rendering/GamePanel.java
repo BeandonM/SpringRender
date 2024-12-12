@@ -19,6 +19,7 @@ public class GamePanel extends JPanel implements Runnable {
     private static final int DEFAULT_SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_WIDTH_MULTI;
     private static final int DEFAULT_SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_HEIGHT_MULTI;
 
+    private static final int FPS_CAP = 60;
     private transient Thread gameThread;
 
     private int playerX = 100;
@@ -44,23 +45,32 @@ public class GamePanel extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        double drawInterval = 1000000000 / 60;
+        double drawInterval = 1000000000 / FPS_CAP;
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
+        long frameTime = 0;
+        int drawCounter = 0;
 
         while (gameThread != null) {
 
             currentTime = System.nanoTime();
 
             delta += (currentTime - lastTime) / drawInterval;
-
+            frameTime += (currentTime - lastTime);
             lastTime = currentTime;
-            
+
             if (delta >= 1) {
                 update();
                 repaint();
                 delta--;
+                drawCounter++;
+            }
+
+            if (frameTime >= 1000000000) {
+                System.out.println("FPS: " + drawCounter);
+                frameTime = 0;
+                drawCounter = 0;
             }
         }
     }
