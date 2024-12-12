@@ -1,5 +1,6 @@
 package springrender.engine.rendering;
 
+import springrender.engine.game.Player;
 import springrender.engine.input.InputHandler;
 
 import javax.swing.JPanel;
@@ -13,7 +14,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     private static final int ORIGINAL_TILE_SIZE = 16;
     private static final int SCALE = 3;
-    private static final int TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE;
+    public static final int TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE;
     private static final int MAX_SCREEN_WIDTH_MULTI = 16;
     private static final int MAX_SCREEN_HEIGHT_MULTI = 12;
     private static final int DEFAULT_SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_WIDTH_MULTI;
@@ -21,21 +22,12 @@ public class GamePanel extends JPanel implements Runnable {
 
     private static final Logger logger = Logger.getLogger(GamePanel.class.getName());
 
-    private static final double DT = 1.0 / 60.0; // fixed timestep
+    private static final double DT = 1.0 / 60.0; // Fixed timestep (60 FPS)
 
     private transient Thread gameThread;
     private InputHandler inputHandler;
 
-    // Player states (current and previous)
-    private double currentPlayerX = 100;
-    private double currentPlayerY = 100;
-    private double previousPlayerX = 100;
-    private double previousPlayerY = 100;
-
-    private double renderX = 100;
-    private double renderY = 100;
-
-    private int playerSpeed = 60; // pixels per second, for example
+    private Player player;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT));
@@ -43,14 +35,21 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
 
         inputHandler = new InputHandler(this);
+        player = new Player(this, inputHandler);
         startGameThread();
     }
 
+    /**
+     * Starts the game loop thread.
+     */
     public void startGameThread() {
-        gameThread = new Thread(this);
+        gameThread = new Thread(this, "Game Thread");
         gameThread.start();
     }
 
+    /**
+     * The main game loop.
+     */
     @Override
     public void run() {
         double currentTime = System.nanoTime() / 1e9;
@@ -64,29 +63,23 @@ public class GamePanel extends JPanel implements Runnable {
             double frameTime = newTime - currentTime;
             currentTime = newTime;
 
-            // Prevent spiral of death
+            // Prevent spiral of death by capping the frameTime
             if (frameTime > 0.25) {
                 frameTime = 0.25;
             }
 
             accumulator += frameTime;
 
-            // Update as many steps as needed
+            // Update game logic as many times as necessary to catch up
             while (accumulator >= DT) {
-                // Move current state into previous before the next logic update
-                previousPlayerX = currentPlayerX;
-                previousPlayerY = currentPlayerY;
-
-                // Update game logic at a fixed timestep
-                update(DT);
+                player.update(DT);
                 accumulator -= DT;
             }
 
             double alpha = accumulator / DT;
 
             // Interpolate for rendering
-            renderX = previousPlayerX * (1.0 - alpha) + currentPlayerX * alpha;
-            renderY = previousPlayerY * (1.0 - alpha) + currentPlayerY * alpha;
+            player.interpolate(alpha);
 
             // Schedule a repaint on the EDT
             repaint();
@@ -97,19 +90,30 @@ public class GamePanel extends JPanel implements Runnable {
                 frameCount = 0;
                 lastFPSCheck = System.nanoTime();
             }
+
+            // Sleep to prevent 100% CPU usage
+            try {
+                Thread.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
+    /**
+     * Updates the game state. Delegated to the player.
+     *
+     * @param dt The fixed timestep in seconds.
+     */
     public void update(double dt) {
-        // dt is in seconds, so speed * dt is how many pixels per update
-        double moveAmount = playerSpeed * dt;
-
-        if (inputHandler.isUpPressed()) currentPlayerY -= moveAmount;
-        if (inputHandler.isDownPressed()) currentPlayerY += moveAmount;
-        if (inputHandler.isLeftPressed()) currentPlayerX -= moveAmount;
-        if (inputHandler.isRightPressed()) currentPlayerX += moveAmount;
+        player.update(dt);
     }
 
+    /**
+     * Renders the game components.
+     *
+     * @param graphic The graphics context.
+     */
     @Override
     protected void paintComponent(Graphics graphic) {
         super.paintComponent(graphic);
@@ -120,7 +124,6 @@ public class GamePanel extends JPanel implements Runnable {
         g2.fillRect(0, 0, DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT);
 
         // Draw the player
-        g2.setColor(Color.WHITE);
-        g2.fillRect((int) renderX, (int) renderY, TILE_SIZE, TILE_SIZE);
+        player.draw(g2);
     }
 }
