@@ -23,7 +23,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     private int playerX = 100;
     private int playerY = 100;
-    private int playerSpeed = 3;
+    private int playerSpeed = 1;
     private static final Logger logger = Logger.getLogger(GamePanel.class.getName());
 
     private InputHandler inputHandler;
@@ -34,6 +34,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
 
         inputHandler = new InputHandler(this);
+        startGameThread();
     }
 
     public void startGameThread() {
@@ -54,6 +55,8 @@ public class GamePanel extends JPanel implements Runnable {
 
             delta += (currentTime - lastTime) / drawInterval;
 
+            lastTime = currentTime;
+            
             if (delta >= 1) {
                 update();
                 repaint();
