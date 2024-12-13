@@ -1,5 +1,6 @@
 package springrender.engine.game;
 
+import springrender.engine.graphics.Sprite;
 import springrender.engine.input.InputHandler;
 import springrender.engine.rendering.GamePanel;
 
@@ -15,7 +16,7 @@ public class Player extends Entity {
 
     private double moveSpeed = 60; // pixels per second
 
-    private BufferedImage up1, down1, left1, right1;
+    private Sprite sprite;
 
     private String direction;
     // Player positions
@@ -35,7 +36,17 @@ public class Player extends Entity {
         this.currentPositionY = 100;
         this.previousPositionX = 100;
         this.previousPositionY = 100;
-        getPlayerImage();
+        initializeSprite();
+    }
+
+    private void initializeSprite() {
+        sprite = new Sprite();
+        sprite.loadImage("up1", "/images/player/player_up_1.png");
+        sprite.loadImage("down1", "/images/player/player_down_1.png");
+        sprite.loadImage("right1", "/images/player/player_right_1.png");
+        sprite.loadImage("left1", "/images/player/player_left_1.png");
+
+        sprite.setCurrentImage("down1");
     }
 
     /**
@@ -51,12 +62,24 @@ public class Player extends Entity {
 
         double moveAmount = moveSpeed * dt;
 
-        if (inputHandler.isUpPressed()) currentPositionY -= moveAmount;
-        if (inputHandler.isDownPressed()) currentPositionY += moveAmount;
-        if (inputHandler.isLeftPressed()) currentPositionX -= moveAmount;
-        if (inputHandler.isRightPressed()) currentPositionX += moveAmount;
+        if (inputHandler.isUpPressed()) {
+            currentPositionY -= moveAmount;
+            sprite.setCurrentImage("up1");
+        }
+        if (inputHandler.isDownPressed()) {
+            currentPositionY += moveAmount;
+            sprite.setCurrentImage("down1");
+        }
+        if (inputHandler.isLeftPressed()) {
+            currentPositionX -= moveAmount;
+            sprite.setCurrentImage("left1");
+        }
+        if (inputHandler.isRightPressed()) {
+            currentPositionX += moveAmount;
+            sprite.setCurrentImage("right1");
+        }
 
-        // Optional: Add boundary checks to prevent the player from moving out of the screen
+        // Add boundary checks to prevent the player from moving out of the screen
         currentPositionX = Math.max(0, Math.min(currentPositionX, gamePanel.getWidth() - GamePanel.TILE_SIZE));
         currentPositionY = Math.max(0, Math.min(currentPositionY, gamePanel.getHeight() - GamePanel.TILE_SIZE));
     }
@@ -67,6 +90,7 @@ public class Player extends Entity {
      * @param alpha The interpolation factor between 0 and 1.
      */
     public void interpolate(double alpha) {
+        alpha = 0;
         renderX = previousPositionX * (1.0 - alpha) + currentPositionX * alpha;
         renderY = previousPositionY * (1.0 - alpha) + currentPositionY * alpha;
     }
@@ -78,14 +102,11 @@ public class Player extends Entity {
      */
     @Override
     public void draw(Graphics2D graphics2D) {
-        //graphics2D.setColor(Color.WHITE);
-        //graphics2D.fillRect((int) renderX, (int) renderY, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
-        BufferedImage image = up1;
+        BufferedImage image = sprite.getCurrentImage();
         graphics2D.drawImage(image, (int) renderX, (int) renderY, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
 
     }
 
-    // Getters for positions (optional, if needed elsewhere)
     public double getCurrentPositionX() {
         return currentPositionX;
     }
@@ -94,12 +115,4 @@ public class Player extends Entity {
         return currentPositionY;
     }
 
-    public void getPlayerImage() {
-        try {
-            up1 = ImageIO.read(getClass().getResourceAsStream("/images/player/player_up_1.png"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
 }
