@@ -23,6 +23,15 @@ public class Vector2D {
         return positionY;
     }
 
+    public float getMagnitude() {
+        return (float) Math.sqrt(positionX * positionX + positionY * positionY);
+    }
+    
+    @Override
+    public String toString() {
+        return "(" + positionX + ", " + positionY + ")";
+    }
+
     public static Vector2D zeroVector() {
         return new Vector2D(0f, 0f);
     }
