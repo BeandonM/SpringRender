@@ -5,6 +5,7 @@ import springrender.engine.rendering.GamePanel;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
 public class Player extends Entity {
 
@@ -13,6 +14,9 @@ public class Player extends Entity {
 
     private double moveSpeed = 60; // pixels per second
 
+    private BufferedImage up1, down1, left1, right1;
+
+    private String direction;
     // Player positions
     private double previousPositionX;
     private double previousPositionY;
