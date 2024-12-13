@@ -1,6 +1,7 @@
 package springrender.engine.game;
 
 import springrender.engine.graphics.Sprite;
+import springrender.engine.graphics.SpriteRender;
 import springrender.engine.input.InputHandler;
 import springrender.engine.rendering.GamePanel;
 
@@ -13,8 +14,9 @@ public class Player extends Entity {
     private GamePanel gamePanel;
     private InputHandler inputHandler;
 
-    private double moveSpeed = 60; // pixels per second
+    private double moveSpeed = 120; // pixels per second
 
+    private SpriteRender spriteRender;
     private Sprite sprite;
 
     private String direction;
@@ -58,6 +60,7 @@ public class Player extends Entity {
         sprite.loadImage("left1", "/images/player/player_left_4.png");
 
         sprite.setState("down1");
+        this.spriteRender = new SpriteRender(sprite, gamePanel.updateManager);
     }
 
     /**
@@ -72,6 +75,7 @@ public class Player extends Entity {
         previousPositionY = currentPositionY;
 
         double moveAmount = moveSpeed * dt;
+        System.out.println(moveAmount);
         boolean moving = false;
         if (inputHandler.isUpPressed()) {
             currentPositionY -= moveAmount;
@@ -80,6 +84,7 @@ public class Player extends Entity {
         }
         if (inputHandler.isDownPressed()) {
             currentPositionY += moveAmount;
+            System.out.println(currentPositionY);
             sprite.setState("down1");
             moving = true;
         }
@@ -99,7 +104,6 @@ public class Player extends Entity {
         currentPositionX = Math.max(0, Math.min(currentPositionX, gamePanel.getWidth() - GamePanel.TILE_SIZE));
         currentPositionY = Math.max(0, Math.min(currentPositionY, gamePanel.getHeight() - GamePanel.TILE_SIZE));
 
-        //sprite.update(dt);
         if (moving) {
             //sprite.update(dt);
         } else {
@@ -126,8 +130,8 @@ public class Player extends Entity {
      */
     @Override
     public void draw(Graphics2D graphics2D) {
-        //BufferedImage image = sprite.getCurrentImage();
-        //graphics2D.drawImage(image, (int) renderX, (int) renderY, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
+        BufferedImage image = spriteRender.getCurrentImage();
+        graphics2D.drawImage(image, (int) currentPositionX, (int) currentPositionY, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
 
     }
 

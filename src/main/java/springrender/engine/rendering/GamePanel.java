@@ -32,7 +32,7 @@ public class GamePanel extends JPanel implements Runnable {
     private transient Thread gameThread;
     private InputHandler inputHandler;
 
-    private UpdateManager updateManager;
+    public UpdateManager updateManager;
 
     private List<Renderable> renderables;
 

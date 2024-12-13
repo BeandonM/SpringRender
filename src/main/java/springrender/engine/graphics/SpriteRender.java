@@ -1,6 +1,7 @@
 package springrender.engine.graphics;
 
 import springrender.engine.game.Updatable;
+import springrender.engine.game.UpdateManager;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -10,15 +11,20 @@ public class SpriteRender implements Updatable {
     private int currentFrame;
     private double timeSinceLastFrame;
 
+    private UpdateManager updateManager;
+
     /**
-     * Constructs a new SpriteRender with the specified Sprite.
+     * Constructs a new SpriteRender and registers it with the provided UpdateManager.
      *
-     * @param sprite The Sprite to render and update.
+     * @param sprite        The Sprite to render and update.
+     * @param updateManager The UpdateManager to register with.
      */
-    public SpriteRender(Sprite sprite) {
+    public SpriteRender(Sprite sprite, UpdateManager updateManager) {
         this.sprite = sprite;
         this.currentFrame = 0;
         this.timeSinceLastFrame = 0.0;
+        this.updateManager = updateManager;
+        this.updateManager.addUpdatable(this);
     }
 
     /**
