@@ -1,6 +1,5 @@
-package springrender.engine.game;
+package springrender.engine.core;
 
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 public abstract class Entity implements Updatable, Renderable {

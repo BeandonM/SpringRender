@@ -1,9 +1,8 @@
 package springrender.engine.rendering;
 
 import springrender.engine.game.Player;
-import springrender.engine.game.Renderable;
-import springrender.engine.game.Updatable;
-import springrender.engine.game.UpdateManager;
+import springrender.engine.core.Renderable;
+import springrender.engine.core.UpdateManager;
 import springrender.engine.input.InputHandler;
 
 import javax.swing.JPanel;

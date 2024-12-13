@@ -1,4 +1,4 @@
-package springrender.engine.game;
+package springrender.engine.core;
 
 import java.util.ArrayList;
 import java.util.List;

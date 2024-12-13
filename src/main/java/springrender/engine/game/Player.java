@@ -1,5 +1,6 @@
 package springrender.engine.game;
 
+import springrender.engine.core.Entity;
 import springrender.engine.graphics.Sprite;
 import springrender.engine.graphics.SpriteRender;
 import springrender.engine.input.InputHandler;

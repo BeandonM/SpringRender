@@ -1,7 +1,7 @@
-package springrender.engine.game;
+package springrender.engine.core;
 
 public interface Updatable {
-    
+
     /**
      * Updates the object's state
      *

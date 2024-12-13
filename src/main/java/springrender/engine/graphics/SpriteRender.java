@@ -1,7 +1,7 @@
 package springrender.engine.graphics;
 
-import springrender.engine.game.Updatable;
-import springrender.engine.game.UpdateManager;
+import springrender.engine.core.Updatable;
+import springrender.engine.core.UpdateManager;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
