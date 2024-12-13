@@ -4,8 +4,7 @@ import springrender.engine.graphics.Sprite;
 import springrender.engine.input.InputHandler;
 import springrender.engine.rendering.GamePanel;
 
-import javax.imageio.ImageIO;
-import java.awt.Color;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
@@ -41,12 +40,24 @@ public class Player extends Entity {
 
     private void initializeSprite() {
         sprite = new Sprite();
-        sprite.loadImage("up1", "/images/player/player_up_1.png");
-        sprite.loadImage("down1", "/images/player/player_down_1.png");
-        sprite.loadImage("right1", "/images/player/player_right_1.png");
-        sprite.loadImage("left1", "/images/player/player_left_1.png");
+        sprite.loadImage("up1", 0, "/images/player/player_up_1.png");
+        sprite.loadImage("up1", 1, "/images/player/player_up_2.png");
+        sprite.loadImage("up1", 2, "/images/player/player_up_3.png");
+        sprite.loadImage("up1", 3, "/images/player/player_up_4.png");
+        sprite.loadImage("down1", 0, "/images/player/player_down_1.png");
+        sprite.loadImage("down1", 1, "/images/player/player_down_2.png");
+        sprite.loadImage("down1", 2, "/images/player/player_down_3.png");
+        sprite.loadImage("down1", 3, "/images/player/player_down_4.png");
+        sprite.loadImage("right1", 0, "/images/player/player_right_1.png");
+        sprite.loadImage("right1", 1, "/images/player/player_right_2.png");
+        sprite.loadImage("right1", 2, "/images/player/player_right_3.png");
+        sprite.loadImage("right1", 3, "/images/player/player_right_4.png");
+        sprite.loadImage("left1", 0, "/images/player/player_left_1.png");
+        sprite.loadImage("left1", 1, "/images/player/player_left_2.png");
+        sprite.loadImage("left1", 2, "/images/player/player_left_3.png");
+        sprite.loadImage("left1", 3, "/images/player/player_left_4.png");
 
-        sprite.setCurrentImage("down1");
+        sprite.setState("down1");
     }
 
     /**
@@ -61,27 +72,40 @@ public class Player extends Entity {
         previousPositionY = currentPositionY;
 
         double moveAmount = moveSpeed * dt;
-
+        boolean moving = false;
         if (inputHandler.isUpPressed()) {
             currentPositionY -= moveAmount;
-            sprite.setCurrentImage("up1");
+            sprite.setState("up1");
+            moving = true;
         }
         if (inputHandler.isDownPressed()) {
             currentPositionY += moveAmount;
-            sprite.setCurrentImage("down1");
+            sprite.setState("down1");
+            moving = true;
         }
         if (inputHandler.isLeftPressed()) {
             currentPositionX -= moveAmount;
-            sprite.setCurrentImage("left1");
+            sprite.setState("left1");
+            moving = true;
         }
         if (inputHandler.isRightPressed()) {
             currentPositionX += moveAmount;
-            sprite.setCurrentImage("right1");
+            sprite.setState("right1");
+            moving = true;
         }
+
 
         // Add boundary checks to prevent the player from moving out of the screen
         currentPositionX = Math.max(0, Math.min(currentPositionX, gamePanel.getWidth() - GamePanel.TILE_SIZE));
         currentPositionY = Math.max(0, Math.min(currentPositionY, gamePanel.getHeight() - GamePanel.TILE_SIZE));
+
+        sprite.update(dt);
+        if (moving) {
+            //sprite.update(dt);
+        } else {
+            // Optionally set to a default standing frame
+            //sprite.setState("idle_" + direction);
+        }
     }
 
     /**
