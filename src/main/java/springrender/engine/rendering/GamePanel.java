@@ -1,6 +1,8 @@
 package springrender.engine.rendering;
 
 import springrender.engine.game.Player;
+import springrender.engine.game.Renderable;
+import springrender.engine.game.Updatable;
 import springrender.engine.input.InputHandler;
 
 import javax.swing.JPanel;
@@ -8,6 +10,8 @@ import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -27,6 +31,10 @@ public class GamePanel extends JPanel implements Runnable {
     private transient Thread gameThread;
     private InputHandler inputHandler;
 
+    private List<Updatable> updatables;
+
+    private List<Renderable> renderables;
+
     private Player player;
 
     public GamePanel() {
@@ -35,7 +43,11 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
 
         inputHandler = new InputHandler(this);
+        updatables = new ArrayList<>();
+        renderables = new ArrayList<>();
         player = new Player(this, inputHandler);
+        addUpdatable(player);
+        addRenderable(player);
         startGameThread();
     }
 
@@ -106,7 +118,23 @@ public class GamePanel extends JPanel implements Runnable {
      * @param dt The fixed timestep in seconds.
      */
     public void update(double dt) {
-        player.update(dt);
+        for (Updatable updatable : updatables) {
+            updatable.update(dt);
+        }
+    }
+
+    public void interpolate(double alpha) {
+        for (Renderable renderable : renderables) {
+            //interpolate
+        }
+    }
+
+    public void addUpdatable(Updatable updatable) {
+        updatables.add(updatable);
+    }
+
+    public void addRenderable(Renderable renderable) {
+        renderables.add(renderable);
     }
 
     /**
@@ -117,13 +145,17 @@ public class GamePanel extends JPanel implements Runnable {
     @Override
     protected void paintComponent(Graphics graphic) {
         super.paintComponent(graphic);
+
         Graphics2D g2 = (Graphics2D) graphic;
 
         // Clear the screen
         g2.setColor(Color.BLACK);
         g2.fillRect(0, 0, DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT);
 
-        // Draw the player
-        player.draw(g2);
+        for (Renderable renderable : renderables) {
+            renderable.draw(g2);
+        }
+
+        g2.dispose();
     }
 }

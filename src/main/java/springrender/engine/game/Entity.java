@@ -3,7 +3,7 @@ package springrender.engine.game;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-public abstract class Entity {
+public abstract class Entity implements Updatable, Renderable {
 
     public abstract void update(double dt);
 
