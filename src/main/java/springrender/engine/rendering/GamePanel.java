@@ -3,6 +3,7 @@ package springrender.engine.rendering;
 import springrender.engine.game.Player;
 import springrender.engine.game.Renderable;
 import springrender.engine.game.Updatable;
+import springrender.engine.game.UpdateManager;
 import springrender.engine.input.InputHandler;
 
 import javax.swing.JPanel;
@@ -31,7 +32,7 @@ public class GamePanel extends JPanel implements Runnable {
     private transient Thread gameThread;
     private InputHandler inputHandler;
 
-    private List<Updatable> updatables;
+    private UpdateManager updateManager;
 
     private List<Renderable> renderables;
 
@@ -43,10 +44,12 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
 
         inputHandler = new InputHandler(this);
-        updatables = new ArrayList<>();
+        updateManager = new UpdateManager();
         renderables = new ArrayList<>();
+
         player = new Player(this, inputHandler);
-        addUpdatable(player);
+        updateManager.addUpdatable(player);
+
         addRenderable(player);
         startGameThread();
     }
@@ -84,14 +87,14 @@ public class GamePanel extends JPanel implements Runnable {
 
             // Update game logic as many times as necessary to catch up
             while (accumulator >= DT) {
-                player.update(DT);
+                update(DT);
                 accumulator -= DT;
             }
 
             double alpha = accumulator / DT;
 
             // Interpolate for rendering
-            player.interpolate(alpha);
+            //player.interpolate(alpha);
 
             // Schedule a repaint on the EDT
             repaint();
@@ -118,19 +121,13 @@ public class GamePanel extends JPanel implements Runnable {
      * @param dt The fixed timestep in seconds.
      */
     public void update(double dt) {
-        for (Updatable updatable : updatables) {
-            updatable.update(dt);
-        }
+        updateManager.updateAll(dt);
     }
 
     public void interpolate(double alpha) {
         for (Renderable renderable : renderables) {
             //interpolate
         }
-    }
-
-    public void addUpdatable(Updatable updatable) {
-        updatables.add(updatable);
     }
 
     public void addRenderable(Renderable renderable) {
