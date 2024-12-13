@@ -78,8 +78,11 @@ public class Player extends Entity {
      */
     @Override
     public void draw(Graphics2D graphics2D) {
-        graphics2D.setColor(Color.WHITE);
-        graphics2D.fillRect((int) renderX, (int) renderY, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
+        //graphics2D.setColor(Color.WHITE);
+        //graphics2D.fillRect((int) renderX, (int) renderY, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
+        BufferedImage image = up1;
+        graphics2D.drawImage(image, (int) renderX, (int) renderY, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
+
     }
 
     // Getters for positions (optional, if needed elsewhere)
