@@ -40,22 +40,22 @@ public class Player extends Entity {
 
     private void initializeSprite() {
         sprite = new Sprite();
-        sprite.loadImage("up1", 0, "/images/player/player_up_1.png");
-        sprite.loadImage("up1", 1, "/images/player/player_up_2.png");
-        sprite.loadImage("up1", 2, "/images/player/player_up_3.png");
-        sprite.loadImage("up1", 3, "/images/player/player_up_4.png");
-        sprite.loadImage("down1", 0, "/images/player/player_down_1.png");
-        sprite.loadImage("down1", 1, "/images/player/player_down_2.png");
-        sprite.loadImage("down1", 2, "/images/player/player_down_3.png");
-        sprite.loadImage("down1", 3, "/images/player/player_down_4.png");
-        sprite.loadImage("right1", 0, "/images/player/player_right_1.png");
-        sprite.loadImage("right1", 1, "/images/player/player_right_2.png");
-        sprite.loadImage("right1", 2, "/images/player/player_right_3.png");
-        sprite.loadImage("right1", 3, "/images/player/player_right_4.png");
-        sprite.loadImage("left1", 0, "/images/player/player_left_1.png");
-        sprite.loadImage("left1", 1, "/images/player/player_left_2.png");
-        sprite.loadImage("left1", 2, "/images/player/player_left_3.png");
-        sprite.loadImage("left1", 3, "/images/player/player_left_4.png");
+        sprite.loadImage("up1", "/images/player/player_up_1.png");
+        sprite.loadImage("up1", "/images/player/player_up_2.png");
+        sprite.loadImage("up1", "/images/player/player_up_3.png");
+        sprite.loadImage("up1", "/images/player/player_up_4.png");
+        sprite.loadImage("down1", "/images/player/player_down_1.png");
+        sprite.loadImage("down1", "/images/player/player_down_2.png");
+        sprite.loadImage("down1", "/images/player/player_down_3.png");
+        sprite.loadImage("down1", "/images/player/player_down_4.png");
+        sprite.loadImage("right1", "/images/player/player_right_1.png");
+        sprite.loadImage("right1", "/images/player/player_right_2.png");
+        sprite.loadImage("right1", "/images/player/player_right_3.png");
+        sprite.loadImage("right1", "/images/player/player_right_4.png");
+        sprite.loadImage("left1", "/images/player/player_left_1.png");
+        sprite.loadImage("left1", "/images/player/player_left_2.png");
+        sprite.loadImage("left1", "/images/player/player_left_3.png");
+        sprite.loadImage("left1", "/images/player/player_left_4.png");
 
         sprite.setState("down1");
     }
@@ -99,7 +99,7 @@ public class Player extends Entity {
         currentPositionX = Math.max(0, Math.min(currentPositionX, gamePanel.getWidth() - GamePanel.TILE_SIZE));
         currentPositionY = Math.max(0, Math.min(currentPositionY, gamePanel.getHeight() - GamePanel.TILE_SIZE));
 
-        sprite.update(dt);
+        //sprite.update(dt);
         if (moving) {
             //sprite.update(dt);
         } else {
@@ -126,8 +126,8 @@ public class Player extends Entity {
      */
     @Override
     public void draw(Graphics2D graphics2D) {
-        BufferedImage image = sprite.getCurrentImage();
-        graphics2D.drawImage(image, (int) renderX, (int) renderY, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
+        //BufferedImage image = sprite.getCurrentImage();
+        //graphics2D.drawImage(image, (int) renderX, (int) renderY, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
 
     }
 

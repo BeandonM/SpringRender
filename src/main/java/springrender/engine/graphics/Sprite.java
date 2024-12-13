@@ -11,31 +11,30 @@ import java.util.ArrayList;
 public class Sprite {
     private Map<String, List<BufferedImage>> animations;
     private String currentState;
-    private int currentFrame;
     private double frameDuration; // Duration of each frame in seconds
-    private double timeSinceLastFrame;
 
+    /**
+     * Constructs a new Sprite with default settings.
+     */
     public Sprite() {
-        animations = new HashMap<>();
-        currentState = "";
-        currentFrame = 0;
-        frameDuration = 0.2;
-        timeSinceLastFrame = 0.0;
+        this.animations = new HashMap<>();
+        this.currentState = "";
+        this.frameDuration = 0.2;
     }
 
     /**
      * Loads an image and associates it with a state and frame index.
      *
      * @param state    The animation state (e.g., "walk_up").
-     * @param frame    The frame index for the state.
      * @param filePath The path to the image resource.
      */
-    public void loadImage(String state, int frame, String filePath) {
+    public void loadImage(String state, String filePath) {
         try {
             BufferedImage img = ImageIO.read(getClass().getResourceAsStream(filePath));
-            animations.computeIfAbsent(state, k -> new ArrayList<>()).add(frame, img);
+            animations.computeIfAbsent(state, k -> new ArrayList<>()).add(img);
         } catch (IOException e) {
             e.printStackTrace();
+            // Consider handling this more gracefully or throwing a custom exception
         }
     }
 
@@ -45,37 +44,42 @@ public class Sprite {
      * @param state The state to switch to.
      */
     public void setState(String state) {
-        if (!state.equals(currentState)) {
-            currentState = state;
-            currentFrame = 0;
-            timeSinceLastFrame = 0.0;
-        }
+        this.currentState = state;
     }
 
     /**
-     * Updates the animation based on the elapsed time.
+     * Retrieves the list of images for the current animation state.
      *
-     * @param dt The delta time since the last update.
+     * @return The list of BufferedImages for the current state, or null if the state doesn't exist.
      */
-    public void update(double dt) {
-        if (animations.containsKey(currentState)) {
-            timeSinceLastFrame += dt;
-            if (timeSinceLastFrame >= frameDuration) {
-                timeSinceLastFrame -= frameDuration;
-                currentFrame = (currentFrame + 1) % animations.get(currentState).size();
-            }
-        }
+    public List<BufferedImage> getCurrentAnimationFrames() {
+        return animations.get(currentState);
     }
 
     /**
-     * Retrieves the current image based on the animation state and frame.
+     * Gets the frame duration.
      *
-     * @return The current BufferedImage.
+     * @return The duration of each frame in seconds.
      */
-    public BufferedImage getCurrentImage() {
-        if (animations.containsKey(currentState) && !animations.get(currentState).isEmpty()) {
-            return animations.get(currentState).get(currentFrame);
-        }
-        return null; // Or a default image
+    public double getFrameDuration() {
+        return frameDuration;
+    }
+
+    /**
+     * Sets the frame duration.
+     *
+     * @param frameDuration The duration of each frame in seconds.
+     */
+    public void setFrameDuration(double frameDuration) {
+        this.frameDuration = frameDuration;
+    }
+
+    /**
+     * Gets the current animation state.
+     *
+     * @return The current animation state.
+     */
+    public String getCurrentState() {
+        return currentState;
     }
 }
