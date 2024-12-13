@@ -3,6 +3,7 @@ package springrender.engine.game;
 import springrender.engine.input.InputHandler;
 import springrender.engine.rendering.GamePanel;
 
+import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -34,6 +35,7 @@ public class Player extends Entity {
         this.currentPositionY = 100;
         this.previousPositionX = 100;
         this.previousPositionY = 100;
+        getPlayerImage();
     }
 
     /**
@@ -87,5 +89,14 @@ public class Player extends Entity {
 
     public double getCurrentPositionY() {
         return currentPositionY;
+    }
+
+    public void getPlayerImage() {
+        try {
+            up1 = ImageIO.read(getClass().getResourceAsStream("/images/player/player_up_1.png"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }
