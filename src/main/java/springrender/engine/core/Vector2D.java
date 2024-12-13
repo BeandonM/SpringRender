@@ -130,6 +130,46 @@ public final class Vector2D {
         return (float) Math.acos(dot / mags);
     }
 
+    /**
+     * Rotates this vector by the specified angle in radians.
+     *
+     * @param angleRadians The angle to rotate by, in radians.
+     * @return A new Vector2D instance representing the rotated vector.
+     */
+    public Vector2D rotate(float angleRadians) {
+        float cos = (float) Math.cos(angleRadians);
+        float sin = (float) Math.sin(angleRadians);
+        return new Vector2D(
+                x * cos - y * sin,
+                x * sin + y * cos
+        );
+    }
+
+    /**
+     * Calculates the distance between this vector and another vector.
+     *
+     * @param other The other vector.
+     * @return The Euclidean distance between the two vectors.
+     */
+    public float distanceTo(Vector2D other) {
+        float deltaX = this.x - other.x;
+        float deltaY = this.y - other.y;
+        return (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    }
+
+    /**
+     * Calculates the distance between two vectors.
+     *
+     * @param v1 The first vector.
+     * @param v2 The second vector.
+     * @return The Euclidean distance between v1 and v2.
+     */
+    public static float distance(Vector2D v1, Vector2D v2) {
+        float deltaX = v1.x - v2.x;
+        float deltaY = v1.y - v2.y;
+        return (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    }
+    
     @Override
     public String toString() {
         return "(" + x + ", " + y + ")";
