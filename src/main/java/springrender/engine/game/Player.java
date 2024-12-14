@@ -2,6 +2,7 @@ package springrender.engine.game;
 
 import springrender.engine.core.Entity;
 import springrender.engine.core.Transform;
+import springrender.engine.core.UpdateManager;
 import springrender.engine.core.Vector2D;
 import springrender.engine.graphics.Sprite;
 import springrender.engine.graphics.SpriteRender;
@@ -14,7 +15,7 @@ import java.awt.image.BufferedImage;
 
 public class Player extends Entity {
 
-    private GamePanel gamePanel;
+    private UpdateManager updateManager;
     private InputHandler inputHandler;
 
     private double moveSpeed = 120; // pixels per second
@@ -39,15 +40,16 @@ public class Player extends Entity {
     private double renderX;
     private double renderY;
 
-    public Player(GamePanel gamePanel, InputHandler inputHandler) {
-        this.gamePanel = gamePanel;
+    public Player(UpdateManager updateManager, InputHandler inputHandler) {
+        this.updateManager = updateManager;
         this.inputHandler = inputHandler;
-        this.currentPositionX = 100;
-        this.currentPositionY = 100;
+        // this.currentPositionX = 100;
+        //this.currentPositionY = 100;
         transform = new Transform(new Vector2D(100f, 100f));
         //previousTransform = transform;
-        this.previousPositionX = 100;
-        this.previousPositionY = 100;
+        // this.previousPositionX = 100;
+        //this.previousPositionY = 100;
+        updateManager.addUpdatable(this);
         this.layer = 2;
         initializeSprite();
     }

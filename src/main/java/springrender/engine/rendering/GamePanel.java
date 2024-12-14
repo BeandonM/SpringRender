@@ -60,6 +60,10 @@ public class GamePanel extends JPanel implements Runnable {
          */
     }
 
+    public void setRenderManager(RenderManager renderManager) {
+        this.renderManager = renderManager;
+    }
+
     /**
      * Starts the game loop thread.
      */
@@ -157,10 +161,10 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) graphic;
 
         // Clear the screen
-        g2.setColor(Color.BLACK);
+        g2.setColor(getBackground());
         g2.fillRect(0, 0, DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT);
 
-        renderManager.render(g2);
+        //renderManager.render(g2);
 
         g2.dispose();
     }

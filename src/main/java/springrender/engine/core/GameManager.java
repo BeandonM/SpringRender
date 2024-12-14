@@ -3,6 +3,7 @@ package springrender.engine.core;
 import springrender.engine.graphics.RenderManager;
 import springrender.engine.input.InputManager;
 import springrender.engine.rendering.GamePanel;
+import springrender.engine.rendering.GameWindow;
 
 public class GameManager implements Runnable {
     private static final double DT = 1.0 / 60.0;
@@ -14,11 +15,15 @@ public class GameManager implements Runnable {
     private InputManager inputManager;
     private GamePanel gamePanel;
 
-    public GameManager(GamePanel gamePanel) {
+    private GameWindow gameWindow;
+
+    public GameManager(GameWindow gameWindow, GamePanel gamePanel) {
+        this.gameWindow = gameWindow;
         this.gamePanel = gamePanel;
         this.updateManager = new UpdateManager();
         this.renderManager = new RenderManager();
         this.inputManager = new InputManager(gamePanel);
+        gamePanel.setRenderManager(this.renderManager);
     }
 
     public void startGame() {
@@ -47,7 +52,7 @@ public class GameManager implements Runnable {
                 updateManager.updateAll(DT);
                 accumulator -= DT;
             }
-
+            
             gamePanel.repaint();
 
             try {
