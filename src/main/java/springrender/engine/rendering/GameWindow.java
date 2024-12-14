@@ -6,7 +6,11 @@ import javax.swing.*;
 
 public class GameWindow {
 
+    JFrame gameWindow;
+
     public GameWindow() {
+        gameWindow = new JFrame();
+        /*
         JFrame gameWindow = new JFrame();
         gameWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         gameWindow.setResizable(true);
@@ -18,6 +22,12 @@ public class GameWindow {
         gameWindow.setLocationRelativeTo(null);
         gameWindow.setVisible(true);
 
+         */
+
+    }
+
+    public JFrame getGameWindow() {
+        return gameWindow;
     }
 
     public static void main(String[] args) {
