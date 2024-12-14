@@ -1,4 +1,4 @@
-package springrender.engine.rendering;
+package springrender.engine.core;
 
 import springrender.engine.core.Renderable;
 
@@ -11,11 +11,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RenderManager {
 
-    private final List<Renderable> renderList;
+    private List<Renderable> renderList;
     private boolean needsSorting;
 
     public RenderManager() {
-        renderList = new CopyOnWriteArrayList<>();
+        renderList = new ArrayList<>();
         needsSorting = false;
     }
 

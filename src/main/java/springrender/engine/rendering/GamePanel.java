@@ -49,13 +49,14 @@ public class GamePanel extends JPanel implements Runnable {
 
         inputHandler = new InputHandler(this);
         updateManager = new UpdateManager();
-        renderManager = new RenderManager()
+        renderManager = new RenderManager();
         renderables = new ArrayList<>();
 
         player = new Player(this, inputHandler);
         updateManager.addUpdatable(player);
 
-        addRenderable(player);
+        renderManager.addRenderable(player);
+        //addRenderable(player);
         startGameThread();
     }
 
@@ -136,8 +137,9 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void addRenderable(Renderable renderable) {
-        renderables.add(renderable);
-        Collections.sort(renderables, Comparator.comparingInt(Renderable::getLayer));
+        renderManager.addRenderable(renderable);
+        //renderables.add(renderable);
+        //Collections.sort(renderables, Comparator.comparingInt(Renderable::getLayer));
     }
 
     /**
@@ -155,9 +157,7 @@ public class GamePanel extends JPanel implements Runnable {
         g2.setColor(Color.BLACK);
         g2.fillRect(0, 0, DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT);
 
-        for (Renderable renderable : renderables) {
-            renderable.draw(g2);
-        }
+        renderManager.render(g2);
 
         g2.dispose();
     }
