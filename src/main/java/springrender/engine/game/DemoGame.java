@@ -40,8 +40,11 @@ public class DemoGame {
 
         Camera camera = new Camera(gamePanel, gameManager.getUpdateManager(), gameManager.getRenderManager());
 
+        player.setCamera(camera);
         gamePanel.setCamera(camera);
         camera.attachToEntity(player.getTransform());
+        camera.setTileManager(tileManager);
+
         gameManager.startGame();
     }
 }

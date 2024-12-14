@@ -99,30 +99,25 @@ public class TileManager {
      * @param camera The camera to base rendering on.
      */
     public void renderMapRelativeToCamera(Graphics2D g2, Camera camera) {
-        // Get camera position in tiles
+        // Get camera position
         Vector2D cameraPosition = camera.getTransform().getPosition();
         float cameraX = cameraPosition.getX();
         float cameraY = cameraPosition.getY();
 
-        int cameraTileX = (int) (cameraX / GamePanel.TILE_SIZE);
-        int cameraTileY = (int) (cameraY / GamePanel.TILE_SIZE);
+        // Calculate visible tiles based on camera position
+        int startCol = Math.max(0, (int) (cameraX / GamePanel.TILE_SIZE));
+        int startRow = Math.max(0, (int) (cameraY / GamePanel.TILE_SIZE));
 
-        // Calculate the visible range of tiles
-        int tilesAcross = gamePanel.getWidth() / (GamePanel.TILE_SIZE / 2);
-        int tilesDown = gamePanel.getHeight() / (GamePanel.TILE_SIZE / 2);
-
-        int startX = Math.max(0, cameraTileX - tilesAcross / 2);
-        int startY = Math.max(0, cameraTileY - tilesDown / 2);
-        int endX = Math.min(map[0].length, cameraTileX + tilesAcross / 2 + 1);
-        int endY = Math.min(map.length, cameraTileY + tilesDown / 2 + 1);
+        int endCol = Math.min(map[0].length, startCol + (int) (camera.viewportWidth / GamePanel.TILE_SIZE) + 1);
+        int endRow = Math.min(map.length, startRow + (int) (camera.viewportHeight / GamePanel.TILE_SIZE) + 1);
 
         // Render visible tiles
-        for (int y = startY; y < endY; y++) {
-            for (int x = startX; x < endX; x++) {
-                Tile tile = map[y][x];
+        for (int row = startRow; row < endRow; row++) {
+            for (int col = startCol; col < endCol; col++) {
+                Tile tile = map[row][col];
                 if (tile != null) {
-                    int screenX = x * GamePanel.TILE_SIZE;
-                    int screenY = y * GamePanel.TILE_SIZE;
+                    int screenX = (col * GamePanel.TILE_SIZE) - (int) cameraX;
+                    int screenY = (row * GamePanel.TILE_SIZE) - (int) cameraY;
                     tile.draw(g2, screenX, screenY);
                 }
             }
@@ -141,6 +136,15 @@ public class TileManager {
             }
         }
     }
+
+    public int getMapWidth() {
+        return map[0].length; // Number of columns
+    }
+
+    public int getMapHeight() {
+        return map.length; // Number of rows
+    }
+
 /*
     public void initializeTileSprite() {
         tileSpriteSheet = new Sprite();

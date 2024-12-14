@@ -68,16 +68,18 @@ public class GamePanel extends JPanel {
         g2.fillRect(0, 0, width, height);
 
         if (camera != null) {
-            Vector2D cameraOffset = camera.getWorldToScreenCoordinates(Vector2D.ZERO);
-            g2.translate(-cameraOffset.getX(), -cameraOffset.getY());
+            Vector2D cameraPosition = camera.getTransform().getPosition();
+            g2.translate(-cameraPosition.getX(), -cameraPosition.getY());
+
+            //g2.translate(-cameraOffset.getX(), -cameraOffset.getY());
             if (tileManager != null) {
-                tileManager.renderMapRelativeToCamera(g2, camera);
+                tileManager.renderMap(g2);
             }
             // Render other game objects through the camera
             if (renderManager != null) {
                 renderManager.render(g2);
             }
-            g2.translate(cameraOffset.getX(), cameraOffset.getY());
+            g2.translate(cameraPosition.getX(), cameraPosition.getY());
         } else {
             if (renderManager != null) {
                 renderManager.render(g2);

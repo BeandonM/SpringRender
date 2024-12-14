@@ -1,9 +1,6 @@
 package springrender.engine.game;
 
-import springrender.engine.core.Entity;
-import springrender.engine.core.Transform;
-import springrender.engine.core.UpdateManager;
-import springrender.engine.core.Vector2D;
+import springrender.engine.core.*;
 import springrender.engine.graphics.RenderManager;
 import springrender.engine.graphics.Sprite;
 import springrender.engine.graphics.SpriteRender;
@@ -20,6 +17,8 @@ public class Player extends Entity {
 
     private RenderManager renderManager;
     private InputHandler inputHandler;
+
+    private Camera camera;
 
     private double moveSpeed = 120; // pixels per second
 
@@ -50,7 +49,7 @@ public class Player extends Entity {
         initializeSprite();
         // this.currentPositionX = 100;
         //this.currentPositionY = 100;
-        transform = new Transform(new Vector2D(100f, 100f));
+        transform = new Transform(new Vector2D(300f, 300f));
         //previousTransform = transform;
         // this.previousPositionX = 100;
         //this.previousPositionY = 100;
@@ -147,6 +146,7 @@ public class Player extends Entity {
             //sprite.setState("idle_" + direction);
         }
         spriteRender.setState(state);
+        //System.out.println("Player position: " + transform.getPosition());
     }
 
     /**
@@ -173,6 +173,8 @@ public class Player extends Entity {
     @Override
     public void draw(Graphics2D graphics2D) {
         BufferedImage image = spriteRender.getCurrentImage();
+        //System.out.println("Player position: " + transform.getPosition());
+        //Vector2D screenPosition = camera.getWorldToScreenCoordinates(transform.getPosition());
         graphics2D.drawImage(image, (int) transform.getPosition().getX(), (int) transform.getPosition().getY(), GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
 
     }
@@ -188,6 +190,10 @@ public class Player extends Entity {
 
     public double getCurrentPositionY() {
         return currentPositionY;
+    }
+
+    public void setCamera(Camera camera) {
+        this.camera = camera;
     }
 
 }

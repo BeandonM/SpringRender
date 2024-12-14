@@ -12,11 +12,13 @@ public class Camera implements Updatable {
     private UpdateManager updateManager;
     private RenderManager renderManager;
 
+    private TileManager tileManager;
+
     private Transform transform;
     private Transform target;
 
-    private float viewportWidth;
-    private float viewportHeight;
+    public float viewportWidth;
+    public float viewportHeight;
 
     public Camera(GamePanel gamePanel, UpdateManager updateManager, RenderManager renderManager) {
         this.gamePanel = gamePanel;
@@ -47,19 +49,50 @@ public class Camera implements Updatable {
 
     public void attachToEntity(Transform targetTransform) {
         this.target = targetTransform;
+
+    }
+
+    public void setTileManager(TileManager tileManager) {
+        this.tileManager = tileManager;
     }
 
     public void update(double dt) {
-        if (target != null) {
-            // Center the camera on the target
+        if (tileManager != null && target != null) {
+            // Get the target's position
             Vector2D targetPosition = target.getPosition();
-            float centeredX = targetPosition.getX() - viewportWidth / 2;
-            float centeredY = targetPosition.getY() - viewportHeight / 2;
 
-            this.transform.setPosition(new Vector2D(centeredX, centeredY));
+            // Calculate the centered camera position
+            float centeredX = targetPosition.getX() - viewportWidth / 2 + (GamePanel.TILE_SIZE / 2);
+            float centeredY = targetPosition.getY() - viewportHeight / 2 + (GamePanel.TILE_SIZE / 2);
+
+            // Get the map dimensions in pixels
+            float mapWidth = tileManager.getMapWidth() * GamePanel.TILE_SIZE;
+            float mapHeight = tileManager.getMapHeight() * GamePanel.TILE_SIZE;
+
+            // Clamp the camera position to prevent it from going out of bounds
+            float clampedX = Math.max(0, Math.min(centeredX, mapWidth - viewportWidth));
+            float clampedY = Math.max(0, Math.min(centeredY, mapHeight - viewportHeight));
+
+            // Update the camera's position
+            this.transform.setPosition(new Vector2D(clampedX, clampedY));
+
         }
     }
 
+    /*
+        public void update(double dt) {
+            if (target != null) {
+                // Center the camera on the target
+                Vector2D targetPosition = target.getPosition();
+                float centeredX = targetPosition.getX() - viewportWidth / 2;
+                float centeredY = targetPosition.getY() - viewportHeight / 2;
+
+                this.transform.setPosition(new Vector2D(centeredX, centeredY));
+            }
+            System.out.println(viewportWidth + "," + viewportHeight);
+            System.out.println("Camera position: " + transform.getPosition());
+        }
+    */
     public Vector2D getWorldToScreenCoordinates(Vector2D worldPosition) {
         return worldPosition.subtract(transform.getPosition());
     }
