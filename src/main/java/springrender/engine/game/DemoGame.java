@@ -18,17 +18,18 @@ public class DemoGame {
     private static final int DEFAULT_SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_HEIGHT_MULTI;
 
     public static void main(String[] args) {
-        GamePanelFactory gamePanelFactory = new GamePanelFactory();
-        gamePanelFactory.setSize(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT);
-        GamePanel gamePanel = gamePanelFactory.create();
-
         GameWindowFactory gameWindowFactory = new GameWindowFactory();
         gameWindowFactory.setTitle("Demo Game");
         gameWindowFactory.setResizable(true);
         gameWindowFactory.setSize(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT);
 
+        GamePanelFactory gamePanelFactory = new GamePanelFactory();
+        gamePanelFactory.setSize(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT);
+        GamePanel gamePanel = gamePanelFactory.create();
 
-        GameWindow gameWindow = gameWindowFactory.create(gamePanel);
+        gameWindowFactory.setGamePanel(gamePanel);
+
+        GameWindow gameWindow = gameWindowFactory.create();
 
         GameManager gameManager = new GameManager(gameWindow, gamePanel);
 

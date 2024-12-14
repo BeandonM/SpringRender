@@ -4,7 +4,7 @@ import springrender.engine.graphics.Renderable;
 
 import java.awt.Graphics2D;
 
-public abstract class Entity implements Updatable, Renderable {
+public abstract class Entity implements Updatable, Renderable, Transformable {
 
     protected Transform transform = new Transform(Vector2D.ZERO);
 
@@ -14,5 +14,4 @@ public abstract class Entity implements Updatable, Renderable {
 
     public abstract void interpolate(double alpha);
 
-    public abstract Transform getTransform();
 }

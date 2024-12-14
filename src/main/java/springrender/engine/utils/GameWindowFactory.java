@@ -13,6 +13,8 @@ public class GameWindowFactory {
     private int width = 800;
     private int height = 600;
 
+    private GamePanel gamePanel;
+
     public GameWindowFactory setTitle(String title) {
         this.title = title;
         return this;
@@ -34,11 +36,17 @@ public class GameWindowFactory {
         return this;
     }
 
-    public GameWindow create(GamePanel gamePanel) {
+    public GameWindowFactory setGamePanel(GamePanel gamePanel) {
+        this.gamePanel = gamePanel;
+        return this;
+    }
+
+    public GameWindow create() {
         JFrame frame = new JFrame(title);
         frame.setDefaultCloseOperation(defaultCloseOperation);
         frame.setResizable(resizable);
         frame.setSize(width, height);
+        //TODO Null check for gamepanel
         frame.add(gamePanel);
         frame.pack();
         frame.setLocationRelativeTo(null);

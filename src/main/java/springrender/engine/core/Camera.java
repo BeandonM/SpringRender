@@ -5,7 +5,7 @@ import springrender.engine.rendering.GamePanel;
 
 import java.awt.Graphics2D;
 
-public class Camera implements Updatable {
+public class Camera implements Updatable, Transformable {
 
     private GamePanel gamePanel;
 
@@ -112,6 +112,7 @@ public class Camera implements Updatable {
         g2.translate(cameraOffset.getX(), cameraOffset.getY());
     }
 
+    @Override
     public Transform getTransform() {
         return transform;
     }
