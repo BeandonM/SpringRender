@@ -23,10 +23,15 @@ public class Tile implements Renderable {
         sprite.setState(state);
     }
 
+    public void draw(Graphics2D graphics2D, int x, int y) {
+        BufferedImage image = spriteRender.getCurrentImage();
+        graphics2D.drawImage(image, x, y, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
+    }
+
+
     @Override
     public void draw(Graphics2D graphics2D) {
-        BufferedImage image = spriteRender.getCurrentImage();
-        graphics2D.drawImage(image, 0, 0, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
+        draw(graphics2D, 0, 0);
     }
 
     @Override

@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import springrender.engine.graphics.Sprite;
 import springrender.engine.rendering.GamePanel;
 
+import java.awt.Graphics2D;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -73,6 +74,19 @@ public class TileManager {
             e.printStackTrace();
         }
 
+    }
+
+    public void renderMap(Graphics2D g) {
+        for (int row = 0; row < map.length; row++) {
+            for (int col = 0; col < map[row].length; col++) {
+                Tile tile = map[row][col];
+                if (tile != null) {
+                    int x = col * GamePanel.TILE_SIZE;
+                    int y = row * GamePanel.TILE_SIZE;
+                    tile.draw(g, x, y);
+                }
+            }
+        }
     }
 /*
     public void initializeTileSprite() {

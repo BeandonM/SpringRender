@@ -1,6 +1,7 @@
 package springrender.engine.rendering;
 
 
+import springrender.engine.core.TileManager;
 import springrender.engine.graphics.RenderManager;
 
 import javax.swing.JPanel;
@@ -23,6 +24,8 @@ public class GamePanel extends JPanel {
     private static final Logger logger = Logger.getLogger(GamePanel.class.getName());
 
     private transient RenderManager renderManager;
+
+    private transient TileManager tileManager;
 
 
     public void setWidth(int width) {
@@ -51,6 +54,8 @@ public class GamePanel extends JPanel {
         // Clear the screen
         g2.setColor(getBackground());
         g2.fillRect(0, 0, width, height);
+
+        tileManager.renderMap(g2);
 
         renderManager.render(g2);
 
