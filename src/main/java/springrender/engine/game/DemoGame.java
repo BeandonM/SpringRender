@@ -30,8 +30,9 @@ public class DemoGame {
 
         GameManager gameManager = new GameManager(gameWindow, gamePanel);
 
-        gameManager.startGame();
 
-        Player player = new Player(gameManager.)
+        Player player = new Player(gameManager.getUpdateManager(), gameManager.getRenderManager(), gameManager.getInputManager().getInputHandler());
+
+        gameManager.startGame();
     }
 }

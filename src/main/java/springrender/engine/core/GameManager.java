@@ -35,6 +35,18 @@ public class GameManager implements Runnable {
         gameThread = null;
     }
 
+    public InputManager getInputManager() {
+        return inputManager;
+    }
+
+    public UpdateManager getUpdateManager() {
+        return updateManager;
+    }
+
+    public RenderManager getRenderManager() {
+        return renderManager;
+    }
+
     @Override
     public void run() {
         double currentTime = System.nanoTime() / 1e9;
@@ -52,7 +64,7 @@ public class GameManager implements Runnable {
                 updateManager.updateAll(DT);
                 accumulator -= DT;
             }
-            
+
             gamePanel.repaint();
 
             try {

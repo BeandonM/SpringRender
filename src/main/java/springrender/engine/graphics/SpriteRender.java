@@ -60,6 +60,19 @@ public class SpriteRender implements Updatable {
     }
 
     /**
+     * Sets the state of the sprite. If the state changes, reset to the first frame.
+     *
+     * @param newState The new state for the sprite.
+     */
+    public void setState(String newState) {
+        if (!sprite.getCurrentState().equals(newState)) {
+            sprite.setState(newState);
+            currentFrame = 0;
+            timeSinceLastFrame = 0.0;
+        }
+    }
+    
+    /**
      * Retrieves the current image to render.
      *
      * @return The current BufferedImage.

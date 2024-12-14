@@ -40,8 +40,10 @@ public class GameWindowFactory {
         frame.setResizable(resizable);
         frame.setSize(width, height);
         frame.add(gamePanel);
+        frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
         return new GameWindow(frame);
     }
 }

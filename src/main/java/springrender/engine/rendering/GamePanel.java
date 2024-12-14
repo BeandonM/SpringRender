@@ -164,7 +164,7 @@ public class GamePanel extends JPanel implements Runnable {
         g2.setColor(getBackground());
         g2.fillRect(0, 0, DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT);
 
-        //renderManager.render(g2);
+        renderManager.render(g2);
 
         g2.dispose();
     }
