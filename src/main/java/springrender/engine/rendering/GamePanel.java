@@ -41,6 +41,7 @@ public class GamePanel extends JPanel implements Runnable {
     private Player player;
 
     public GamePanel() {
+        /*
         this.setPreferredSize(new Dimension(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
@@ -56,6 +57,7 @@ public class GamePanel extends JPanel implements Runnable {
         renderManager.addRenderable(player);
         //addRenderable(player);
         startGameThread();
+         */
     }
 
     /**
@@ -71,6 +73,7 @@ public class GamePanel extends JPanel implements Runnable {
      */
     @Override
     public void run() {
+        /*
         double currentTime = System.nanoTime() / 1e9;
         double accumulator = 0.0;
 
@@ -117,6 +120,8 @@ public class GamePanel extends JPanel implements Runnable {
                 e.printStackTrace();
             }
         }
+
+         */
     }
 
     /**
