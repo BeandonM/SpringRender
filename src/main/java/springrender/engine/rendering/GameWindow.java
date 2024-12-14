@@ -8,8 +8,8 @@ public class GameWindow {
 
     JFrame gameWindow;
 
-    public GameWindow() {
-        gameWindow = new JFrame();
+    public GameWindow(JFrame frame) {
+        gameWindow = frame;
         /*
         JFrame gameWindow = new JFrame();
         gameWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -28,9 +28,5 @@ public class GameWindow {
 
     public JFrame getGameWindow() {
         return gameWindow;
-    }
-
-    public static void main(String[] args) {
-        GameWindow gameWindow = new GameWindow();
     }
 }
