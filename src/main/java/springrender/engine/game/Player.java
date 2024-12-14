@@ -1,6 +1,7 @@
 package springrender.engine.game;
 
 import springrender.engine.core.Entity;
+import springrender.engine.core.Transform;
 import springrender.engine.core.Vector2D;
 import springrender.engine.graphics.Sprite;
 import springrender.engine.graphics.SpriteRender;
@@ -24,7 +25,7 @@ public class Player extends Entity {
     private String direction;
     // Player positions
 
-    private Vector2D transform;
+    private Transform transform;
 
     private Vector2D previousTransform;
     private double previousPositionX;
@@ -41,8 +42,8 @@ public class Player extends Entity {
         this.inputHandler = inputHandler;
         this.currentPositionX = 100;
         this.currentPositionY = 100;
-        transform = new Vector2D(100f, 100f);
-        previousTransform = transform;
+        transform = new Transform(new Vector2D(100f, 100f));
+        //previousTransform = transform;
         this.previousPositionX = 100;
         this.previousPositionY = 100;
         initializeSprite();
@@ -79,39 +80,44 @@ public class Player extends Entity {
     @Override
     public void update(double dt) {
         // Store the previous position before updating
-        previousTransform = transform;
+        //previousTransform = transform;
         previousPositionX = currentPositionX;
         previousPositionY = currentPositionY;
 
         float moveAmount = (float) (moveSpeed * dt);
+        Vector2D moveVector = Vector2D.ZERO;
         //System.out.println(moveAmount);
         boolean moving = false;
         if (inputHandler.isUpPressed()) {
-            transform = transform.add(new Vector2D(0f, -moveAmount));
+            moveVector = moveVector.add(Vector2D.UP.multiply(moveAmount));
+            //transform.translate(); transform.add(new Vector2D(0f, -moveAmount));
             currentPositionY -= moveAmount;
             sprite.setState("up1");
             moving = true;
         }
         if (inputHandler.isDownPressed()) {
-            transform = transform.add(new Vector2D(0f, moveAmount));
+            moveVector = moveVector.add(Vector2D.DOWN.multiply(moveAmount));
+            //transform = transform.add(new Vector2D(0f, moveAmount));
             currentPositionY += moveAmount;
             //System.out.println(currentPositionY);
             sprite.setState("down1");
             moving = true;
         }
         if (inputHandler.isLeftPressed()) {
-            transform = transform.add(new Vector2D(-moveAmount, 0f));
+            moveVector = moveVector.add(Vector2D.LEFT.multiply(moveAmount));
+            //transform = transform.add(new Vector2D(-moveAmount, 0f));
             currentPositionX -= moveAmount;
             sprite.setState("left1");
             moving = true;
         }
         if (inputHandler.isRightPressed()) {
-            transform = transform.add(new Vector2D(moveAmount, 0f));
+            moveVector = moveVector.add(Vector2D.RIGHT.multiply(moveAmount));
+            //transform = transform.add(new Vector2D(moveAmount, 0f));
             currentPositionX += moveAmount;
             sprite.setState("right1");
             moving = true;
         }
-
+        transform.translate(moveVector);
 
         // Add boundary checks to prevent the player from moving out of the screen
         //currentPositionX = Math.max(0, Math.min(currentPositionX, gamePanel.getWidth() - GamePanel.TILE_SIZE));
@@ -144,7 +150,7 @@ public class Player extends Entity {
     @Override
     public void draw(Graphics2D graphics2D) {
         BufferedImage image = spriteRender.getCurrentImage();
-        graphics2D.drawImage(image, (int) transform.getX(), (int) transform.getY(), GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
+        graphics2D.drawImage(image, (int) transform.getPosition().getX(), (int) transform.getPosition().getY(), GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
 
     }
 
