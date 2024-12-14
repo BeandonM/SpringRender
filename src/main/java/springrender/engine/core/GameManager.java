@@ -14,6 +14,8 @@ public class GameManager implements Updatable, Renderer {
     private UpdateManager updateManager;
     private RenderManager renderManager;
     private InputManager inputManager;
+
+
     private GamePanel gamePanel;
 
     private GameWindow gameWindow;
@@ -44,6 +46,10 @@ public class GameManager implements Updatable, Renderer {
         return gameWindow;
     }
 
+    public GamePanel getGamePanel() {
+        return gamePanel;
+    }
+
     public InputManager getInputManager() {
         return inputManager;
     }
@@ -55,6 +61,7 @@ public class GameManager implements Updatable, Renderer {
     public RenderManager getRenderManager() {
         return renderManager;
     }
+
 
     public void interpolate(double alpha) {
         //for (Renderable renderable : renderManager) {

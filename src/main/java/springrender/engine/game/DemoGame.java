@@ -1,6 +1,7 @@
 package springrender.engine.game;
 
 import springrender.engine.core.Camera;
+import springrender.engine.core.GameApplication;
 import springrender.engine.core.GameManager;
 import springrender.engine.core.TileManager;
 import springrender.engine.rendering.GamePanel;
@@ -18,6 +19,31 @@ public class DemoGame {
     private static final int DEFAULT_SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_HEIGHT_MULTI;
 
     public static void main(String[] args) {
+        GameApplication gameApp = new GameApplication(
+                DEFAULT_SCREEN_WIDTH,
+                DEFAULT_SCREEN_HEIGHT,
+                "/tiles/tiles.json",
+                "/maps/map1.txt"
+        );
+
+        GameManager gameManager = gameApp.getGameManager();
+        Camera camera = new Camera(
+                gameApp.getGamePanel(),
+                gameManager.getUpdateManager(),
+                gameManager.getRenderManager()
+        );
+        Player player = new Player(
+                gameManager.getUpdateManager(),
+                gameManager.getRenderManager(),
+                gameManager.getInputManager().getInputHandler());
+
+        gameManager.getGamePanel().setCamera(camera);
+        camera.attachToEntity(player.getTransform());
+        camera.setTileManager(gameApp.getTileManager());
+
+        gameManager.startGame();
+
+        /*
         GameWindowFactory gameWindowFactory = new GameWindowFactory();
         gameWindowFactory.setTitle("Demo Game");
         gameWindowFactory.setResizable(true);
@@ -47,5 +73,6 @@ public class DemoGame {
         camera.setTileManager(tileManager);
 
         gameManager.startGame();
+         */
     }
 }
