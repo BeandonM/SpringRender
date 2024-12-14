@@ -1,5 +1,7 @@
 package springrender.engine.rendering;
 
+import springrender.engine.core.TileManager;
+
 import javax.swing.*;
 
 public class GameWindow {
@@ -11,6 +13,7 @@ public class GameWindow {
         gameWindow.setTitle("Test Title");
         GamePanel gamePanel = new GamePanel();
         gameWindow.add(gamePanel);
+        TileManager tileManager = new TileManager(gamePanel);
         gameWindow.pack();
         gameWindow.setLocationRelativeTo(null);
         gameWindow.setVisible(true);
