@@ -15,10 +15,6 @@ public class GamePanel extends JPanel {
     private static final int ORIGINAL_TILE_SIZE = 16;
     private static final int SCALE = 3;
     public static final int TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE;
-    private static final int MAX_SCREEN_WIDTH_MULTI = 16;
-    private static final int MAX_SCREEN_HEIGHT_MULTI = 12;
-    private static final int DEFAULT_SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_WIDTH_MULTI;
-    private static final int DEFAULT_SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_HEIGHT_MULTI;
 
     private int width;
 
