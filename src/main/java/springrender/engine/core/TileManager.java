@@ -7,7 +7,11 @@ import springrender.engine.graphics.Sprite;
 import springrender.engine.rendering.GamePanel;
 
 import java.awt.Graphics2D;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -27,13 +31,25 @@ public class TileManager {
     public TileManager(GamePanel gamePanel, String tileConfigPath, String mapPath) {
         this.gamePanel = gamePanel;
         this.tileDefinitions = new HashMap<>();
-        loadTileDefinitions(tileConfigPath);
-        loadMap(mapPath);
+        // Load tile definitions
+        InputStream tilesInputStream = getClass().getResourceAsStream(tileConfigPath);
+        if (tilesInputStream == null) {
+            throw new IllegalArgumentException("Tile file not found: " + tileConfigPath);
+        }
+
+        // Load map layout
+        InputStream mapInputStream = getClass().getResourceAsStream(mapPath);
+        if (mapInputStream == null) {
+            throw new IllegalArgumentException("Map file not found: " + mapPath);
+        }
+        loadTileDefinitions(tilesInputStream);
+        loadMap(mapInputStream);
+
     }
 
-    public void loadTileDefinitions(String filePath) {
+    public void loadTileDefinitions(InputStream inputStream) {
         try {
-            String jsonString = Files.readString(Path.of(filePath));
+            String jsonString = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
             JSONObject json = new JSONObject(jsonString);
             JSONArray tiles = json.getJSONArray("tiles");
 
@@ -54,9 +70,9 @@ public class TileManager {
         }
     }
 
-    public void loadMap(String filepath) {
+    public void loadMap(InputStream inputStream) {
         try {
-            List<String> lines = Files.readAllLines(Path.of(filepath));
+            List<String> lines = new BufferedReader(new InputStreamReader(inputStream)).lines().toList();
             int rows = lines.size();
             int cols = lines.get(0).split(" ").length;
 
@@ -70,7 +86,7 @@ public class TileManager {
                 }
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

@@ -1,6 +1,7 @@
 package springrender.engine.game;
 
 import springrender.engine.core.GameManager;
+import springrender.engine.core.TileManager;
 import springrender.engine.rendering.GamePanel;
 import springrender.engine.rendering.GameWindow;
 import springrender.engine.utils.GamePanelFactory;
@@ -30,6 +31,9 @@ public class DemoGame {
 
         GameManager gameManager = new GameManager(gameWindow, gamePanel);
 
+        TileManager tileManager = new TileManager(gamePanel, "/tiles/tiles.json", "/maps/map1.txt");
+
+        gamePanel.setTileManager(tileManager);
 
         Player player = new Player(gameManager.getUpdateManager(), gameManager.getRenderManager(), gameManager.getInputManager().getInputHandler());
 

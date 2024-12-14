@@ -40,6 +40,10 @@ public class GamePanel extends JPanel {
         this.renderManager = renderManager;
     }
 
+    public void setTileManager(TileManager tileManager) {
+        this.tileManager = tileManager;
+    }
+
     /**
      * Renders the game components.
      *
@@ -55,7 +59,10 @@ public class GamePanel extends JPanel {
         g2.setColor(getBackground());
         g2.fillRect(0, 0, width, height);
 
-        tileManager.renderMap(g2);
+        if (tileManager != null) {
+            tileManager.renderMap(g2);
+        }
+
 
         renderManager.render(g2);
 
