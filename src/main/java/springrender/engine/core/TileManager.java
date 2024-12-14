@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TileManager {
@@ -53,6 +54,24 @@ public class TileManager {
     }
 
     public void loadMap(String filepath) {
+        try {
+            List<String> lines = Files.readAllLines(Path.of(filepath));
+            int rows = lines.size();
+            int cols = lines.get(0).split(" ").length;
+
+            map = new Tile[rows][cols];
+
+            for (int row = 0; row < rows; row++) {
+                String[] tokens = lines.get(row).split(" ");
+                for (int col = 0; col < tokens.length; col++) {
+                    int tileId = Integer.parseInt(tokens[col]);
+                    map[row][col] = tileDefinitions.get(tileId);
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 /*
