@@ -1,10 +1,10 @@
 package springrender.engine.rendering;
 
 import springrender.engine.game.Player;
-import springrender.engine.core.Renderable;
+import springrender.engine.graphics.Renderable;
 import springrender.engine.core.UpdateManager;
 import springrender.engine.input.InputHandler;
-import springrender.engine.core.RenderManager;
+import springrender.engine.graphics.RenderManager;
 
 import javax.swing.JPanel;
 import java.awt.Dimension;
@@ -12,8 +12,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 

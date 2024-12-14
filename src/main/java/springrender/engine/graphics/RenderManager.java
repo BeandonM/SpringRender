@@ -1,13 +1,12 @@
-package springrender.engine.core;
+package springrender.engine.graphics;
 
-import springrender.engine.core.Renderable;
+import springrender.engine.graphics.Renderable;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RenderManager {
 

@@ -2,6 +2,7 @@ package springrender.engine.core;
 
 import springrender.engine.graphics.Sprite;
 import springrender.engine.graphics.SpriteRender;
+import springrender.engine.graphics.Renderable;
 import springrender.engine.rendering.GamePanel;
 
 import java.awt.Graphics2D;

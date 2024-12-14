@@ -1,4 +1,4 @@
-package springrender.engine.core;
+package springrender.engine.graphics;
 
 import java.awt.Graphics2D;
 
