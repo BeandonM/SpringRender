@@ -31,7 +31,7 @@ public class GameSingleThreaded implements GameThread {
 
     @Override
     public void update(double deltaTime) {
-        //gameManager.update(deltaTime);
+        gameManager.update(deltaTime);
     }
 
     @Override
@@ -41,6 +41,37 @@ public class GameSingleThreaded implements GameThread {
 
     @Override
     public void run() {
+        double previousTime = System.nanoTime() / 1e9;
+        double accumulator = 0.0;
+        int frameCount = 0;
+        long lastFPSCheck = System.nanoTime();
+        while (running) {
+            double currentTime = System.nanoTime() / 1e9;
+            double deltaTime = currentTime - previousTime;
+            previousTime = currentTime;
 
+            accumulator += deltaTime;
+
+            while (accumulator >= TIME_PER_FRAME) {
+                update(TIME_PER_FRAME);
+                accumulator -= TIME_PER_FRAME;
+            }
+
+            //double alpha = accumulator / DT;
+            //interpolate(alpha);
+
+            frameCount++;
+            render();
+            if ((System.nanoTime() - lastFPSCheck) >= 1_000_000_000L) {
+                System.out.println("FPS: " + frameCount);
+                frameCount = 0;
+                lastFPSCheck = System.nanoTime();
+            }
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

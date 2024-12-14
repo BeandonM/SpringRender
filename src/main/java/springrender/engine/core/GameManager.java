@@ -2,15 +2,14 @@ package springrender.engine.core;
 
 import springrender.engine.graphics.RenderManager;
 import springrender.engine.graphics.Renderable;
+import springrender.engine.graphics.Renderer;
 import springrender.engine.input.InputManager;
 import springrender.engine.rendering.GamePanel;
 import springrender.engine.rendering.GameWindow;
 
-public class GameManager implements Updatable {
-    private static final double DT = 1.0 / 60.0;
+public class GameManager implements Updatable, Renderer {
 
     private transient GameThread gameThread;
-    //private transient Thread gameThread;
 
     private UpdateManager updateManager;
     private RenderManager renderManager;
@@ -31,13 +30,18 @@ public class GameManager implements Updatable {
     public void startGame() {
         gameThread = new GameSingleThreaded(this, gamePanel);
         gameThread.start();
-        //gameThread = new Thread(this);
-        //gameThread.start();
     }
 
     public void stopGame() {
         gameThread.stop();
-        //gameThread = null;
+    }
+
+    public GameThread getGameThread() {
+        return gameThread;
+    }
+
+    public GameWindow getGameWindow() {
+        return gameWindow;
     }
 
     public InputManager getInputManager() {
@@ -52,47 +56,6 @@ public class GameManager implements Updatable {
         return renderManager;
     }
 
-
-    public void run() {
-        /*
-        double currentTime = System.nanoTime() / 1e9;
-        double accumulator = 0.0;
-        long lastFPSCheck = System.nanoTime();
-        int frameCount = 0;
-        while (gameThread != null) {
-            double newTime = System.nanoTime() / 1e9;
-            double frameTime = newTime - currentTime;
-            currentTime = newTime;
-
-            if (frameTime > 0.25) frameTime = 0.25;
-            accumulator += frameTime;
-
-            while (accumulator >= DT) {
-                updateManager.updateAll(DT);
-                accumulator -= DT;
-            }
-
-            double alpha = accumulator / DT;
-            interpolate(alpha);
-
-            gamePanel.repaint();
-
-            frameCount++;
-            if ((System.nanoTime() - lastFPSCheck) >= 1_000_000_000L) {
-                System.out.println("FPS: " + frameCount);
-                frameCount = 0;
-                lastFPSCheck = System.nanoTime();
-            }
-            try {
-                Thread.sleep(2);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-         */
-    }
-
     public void interpolate(double alpha) {
         //for (Renderable renderable : renderManager) {
         //interpolate
@@ -104,4 +67,8 @@ public class GameManager implements Updatable {
         updateManager.updateAll(deltaTime);
     }
 
+    @Override
+    public void render() {
+        gamePanel.repaint();
+    }
 }
