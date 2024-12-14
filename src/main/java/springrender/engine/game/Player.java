@@ -31,7 +31,7 @@ public class Player extends Entity {
     private String direction = "down";
     // Player positions
 
-    private Transform transform;
+    //private Transform transform;
 
     private Vector2D previousTransform;
     private double previousPositionX;
@@ -158,6 +158,11 @@ public class Player extends Entity {
         alpha = 0;
         renderX = previousPositionX * (1.0 - alpha) + currentPositionX * alpha;
         renderY = previousPositionY * (1.0 - alpha) + currentPositionY * alpha;
+    }
+
+    @Override
+    public Transform getTransform() {
+        return transform;
     }
 
     /**

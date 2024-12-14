@@ -5,9 +5,11 @@ import springrender.engine.rendering.GamePanel;
 
 import java.awt.Graphics2D;
 
-public class Camera {
+public class Camera implements Updatable {
 
     private GamePanel gamePanel;
+
+    private UpdateManager updateManager;
     private RenderManager renderManager;
 
     private Transform transform;
@@ -16,14 +18,31 @@ public class Camera {
     private float viewportWidth;
     private float viewportHeight;
 
-    public Camera(GamePanel gamePanel, RenderManager renderManager) {
+    public Camera(GamePanel gamePanel, UpdateManager updateManager, RenderManager renderManager) {
         this.gamePanel = gamePanel;
+        this.updateManager = updateManager;
         this.renderManager = renderManager;
         this.transform = new Transform(Vector2D.ZERO);
 
+        initializeViewport();
         // Set the viewport size based on the GamePanel dimensions
         this.viewportWidth = gamePanel.getWidth();
         this.viewportHeight = gamePanel.getHeight();
+
+        this.updateManager.addUpdatable(this);
+    }
+
+    public void initializeViewport() {
+        this.viewportWidth = (float) gamePanel.getWidth();
+        this.viewportHeight = (float) gamePanel.getHeight();
+
+        if (viewportWidth == 0 || viewportHeight == 0) {
+            // Log a warning to indicate a potential issue
+            System.err.println("Warning: Viewport size is not initialized correctly. Defaulting to fallback dimensions.");
+            // Provide a default fallback size
+            this.viewportWidth = 800;
+            this.viewportHeight = 600;
+        }
     }
 
     public void attachToEntity(Transform targetTransform) {
@@ -58,5 +77,9 @@ public class Camera {
 
         // Reset translation after rendering
         g2.translate(cameraOffset.getX(), cameraOffset.getY());
+    }
+
+    public Transform getTransform() {
+        return transform;
     }
 }

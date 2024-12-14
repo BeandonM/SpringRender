@@ -3,6 +3,7 @@ package springrender.engine.rendering;
 
 import springrender.engine.core.Camera;
 import springrender.engine.core.TileManager;
+import springrender.engine.core.Vector2D;
 import springrender.engine.graphics.RenderManager;
 
 import javax.swing.JPanel;
@@ -65,11 +66,18 @@ public class GamePanel extends JPanel {
         // Clear the screen
         g2.setColor(getBackground());
         g2.fillRect(0, 0, width, height);
-        if (tileManager != null) {
-            tileManager.renderMap(g2);
-        }
+
         if (camera != null) {
-            camera.render(g2);
+            Vector2D cameraOffset = camera.getWorldToScreenCoordinates(Vector2D.ZERO);
+            g2.translate(-cameraOffset.getX(), -cameraOffset.getY());
+            if (tileManager != null) {
+                tileManager.renderMapRelativeToCamera(g2, camera);
+            }
+            // Render other game objects through the camera
+            if (renderManager != null) {
+                renderManager.render(g2);
+            }
+            g2.translate(cameraOffset.getX(), cameraOffset.getY());
         } else {
             if (renderManager != null) {
                 renderManager.render(g2);
