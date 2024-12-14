@@ -1,6 +1,7 @@
 package springrender.engine.core;
 
 import springrender.engine.graphics.RenderManager;
+import springrender.engine.graphics.Renderable;
 import springrender.engine.input.InputManager;
 import springrender.engine.rendering.GamePanel;
 import springrender.engine.rendering.GameWindow;
@@ -51,7 +52,8 @@ public class GameManager implements Runnable {
     public void run() {
         double currentTime = System.nanoTime() / 1e9;
         double accumulator = 0.0;
-
+        long lastFPSCheck = System.nanoTime();
+        int frameCount = 0;
         while (gameThread != null) {
             double newTime = System.nanoTime() / 1e9;
             double frameTime = newTime - currentTime;
@@ -65,13 +67,28 @@ public class GameManager implements Runnable {
                 accumulator -= DT;
             }
 
+            double alpha = accumulator / DT;
+            interpolate(alpha);
+
             gamePanel.repaint();
 
+            frameCount++;
+            if ((System.nanoTime() - lastFPSCheck) >= 1_000_000_000L) {
+                System.out.println("FPS: " + frameCount);
+                frameCount = 0;
+                lastFPSCheck = System.nanoTime();
+            }
             try {
                 Thread.sleep(2);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void interpolate(double alpha) {
+        //for (Renderable renderable : renderManager) {
+        //interpolate
+        //}
     }
 }

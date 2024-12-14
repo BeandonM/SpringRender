@@ -17,7 +17,7 @@ public class TileManager {
         initializeTileSprite();
 
         tile[0] = new Tile(tileSpriteSheet, "grass");
-        gamePanel.addRenderable(tile[0]);
+        //gamePanel.addRenderable(tile[0]);
     }
 
     public void initializeTileSprite() {

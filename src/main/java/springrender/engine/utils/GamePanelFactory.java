@@ -13,7 +13,7 @@ public class GamePanelFactory {
     private int width;
     private int height;
     private Color backgroundColor = Color.darkGray;
-    
+
     public GamePanelFactory() {
         this.width = DEFAULT_WIDTH;
         this.height = DEFAULT_HEIGHT;
@@ -32,6 +32,8 @@ public class GamePanelFactory {
 
     public GamePanel create() {
         GamePanel gamePanel = new GamePanel();
+        gamePanel.setWidth(width);
+        gamePanel.setHeight(width);
         gamePanel.setPreferredSize(new Dimension(width, height));
         gamePanel.setBackground(backgroundColor);
         return gamePanel;
