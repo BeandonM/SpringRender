@@ -14,6 +14,17 @@ public class SpriteRender implements Updatable {
     private UpdateManager updateManager;
 
     /**
+     * Constructs a new SpriteRender, this constructor is for static images
+     *
+     * @param sprite The Sprite to render and update.
+     */
+    public SpriteRender(Sprite sprite) {
+        this.sprite = sprite;
+        this.currentFrame = 0;
+        this.timeSinceLastFrame = 0.0;
+    }
+
+    /**
      * Constructs a new SpriteRender and registers it with the provided UpdateManager.
      *
      * @param sprite        The Sprite to render and update.
