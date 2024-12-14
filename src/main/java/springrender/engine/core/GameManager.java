@@ -6,10 +6,11 @@ import springrender.engine.input.InputManager;
 import springrender.engine.rendering.GamePanel;
 import springrender.engine.rendering.GameWindow;
 
-public class GameManager implements Runnable {
+public class GameManager implements Updatable {
     private static final double DT = 1.0 / 60.0;
 
-    private transient Thread gameThread;
+    private transient GameThread gameThread;
+    //private transient Thread gameThread;
 
     private UpdateManager updateManager;
     private RenderManager renderManager;
@@ -28,12 +29,15 @@ public class GameManager implements Runnable {
     }
 
     public void startGame() {
-        gameThread = new Thread(this);
+        gameThread = new GameSingleThreaded(this, gamePanel);
         gameThread.start();
+        //gameThread = new Thread(this);
+        //gameThread.start();
     }
 
     public void stopGame() {
-        gameThread = null;
+        gameThread.stop();
+        //gameThread = null;
     }
 
     public InputManager getInputManager() {
@@ -48,8 +52,9 @@ public class GameManager implements Runnable {
         return renderManager;
     }
 
-    @Override
+
     public void run() {
+        /*
         double currentTime = System.nanoTime() / 1e9;
         double accumulator = 0.0;
         long lastFPSCheck = System.nanoTime();
@@ -84,6 +89,8 @@ public class GameManager implements Runnable {
                 e.printStackTrace();
             }
         }
+
+         */
     }
 
     public void interpolate(double alpha) {
@@ -91,4 +98,10 @@ public class GameManager implements Runnable {
         //interpolate
         //}
     }
+
+    @Override
+    public void update(double deltaTime) {
+        updateManager.updateAll(deltaTime);
+    }
+
 }
