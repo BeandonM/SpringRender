@@ -4,6 +4,7 @@ import springrender.engine.game.Player;
 import springrender.engine.core.Renderable;
 import springrender.engine.core.UpdateManager;
 import springrender.engine.input.InputHandler;
+import springrender.engine.core.RenderManager;
 
 import javax.swing.JPanel;
 import java.awt.Dimension;
@@ -11,6 +12,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -33,6 +36,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     public UpdateManager updateManager;
 
+    private RenderManager renderManager;
+
     private List<Renderable> renderables;
 
     private Player player;
@@ -44,6 +49,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         inputHandler = new InputHandler(this);
         updateManager = new UpdateManager();
+        renderManager = new RenderManager()
         renderables = new ArrayList<>();
 
         player = new Player(this, inputHandler);
@@ -131,6 +137,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void addRenderable(Renderable renderable) {
         renderables.add(renderable);
+        Collections.sort(renderables, Comparator.comparingInt(Renderable::getLayer));
     }
 
     /**

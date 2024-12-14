@@ -19,6 +19,8 @@ public class Player extends Entity {
 
     private double moveSpeed = 120; // pixels per second
 
+    private int layer;
+
     private SpriteRender spriteRender;
     private Sprite sprite;
 
@@ -46,6 +48,7 @@ public class Player extends Entity {
         //previousTransform = transform;
         this.previousPositionX = 100;
         this.previousPositionY = 100;
+        this.layer = 2;
         initializeSprite();
     }
 
@@ -152,6 +155,11 @@ public class Player extends Entity {
         BufferedImage image = spriteRender.getCurrentImage();
         graphics2D.drawImage(image, (int) transform.getPosition().getX(), (int) transform.getPosition().getY(), GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
 
+    }
+
+    @Override
+    public int getLayer() {
+        return layer;
     }
 
     public double getCurrentPositionX() {

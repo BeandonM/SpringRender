@@ -10,4 +10,6 @@ public interface Renderable {
      * @param graphics2D
      */
     void draw(Graphics2D graphics2D);
+
+    int getLayer();
 }

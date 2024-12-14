@@ -24,4 +24,11 @@ public class Tile implements Renderable {
         BufferedImage image = spriteRender.getCurrentImage();
         graphics2D.drawImage(image, 0, 0, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
     }
+
+    @Override
+    public int getLayer() {
+        return 0;
+    }
+
+
 }
