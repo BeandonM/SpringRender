@@ -1,5 +1,6 @@
 package springrender.engine.game;
 
+import springrender.engine.core.Camera;
 import springrender.engine.core.GameManager;
 import springrender.engine.core.TileManager;
 import springrender.engine.rendering.GamePanel;
@@ -37,6 +38,9 @@ public class DemoGame {
 
         Player player = new Player(gameManager.getUpdateManager(), gameManager.getRenderManager(), gameManager.getInputManager().getInputHandler());
 
+        Camera camera = new Camera(gamePanel, gameManager.getRenderManager());
+        gamePanel.setCamera(camera);
+        //camera.attachToEntity(player.get);
         gameManager.startGame();
     }
 }
