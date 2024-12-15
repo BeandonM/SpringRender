@@ -20,7 +20,7 @@ public class Player extends Entity {
 
     private Camera camera;
 
-    private double moveSpeed = 120; // pixels per second
+    private double moveSpeed = 300; // pixels per second
 
     private int layer;
 

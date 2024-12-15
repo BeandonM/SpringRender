@@ -36,6 +36,8 @@ public class TileLoader implements ResourceLoader {
                 sprite.loadImage(type, spritePath);
                 tileDefinitions.put(id, new Tile(sprite, type, isWalkable));
             }
+
+            ResourceManager.getInstance().addResource("tileDefinitions", tileDefinitions);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }

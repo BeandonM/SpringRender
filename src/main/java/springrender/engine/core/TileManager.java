@@ -47,7 +47,7 @@ public class TileManager {
         if (mapInputStream == null) {
             throw new IllegalArgumentException("Map file not found: " + mapPath);
         }
-        mapLoader.load(mapInputStream, tileLoader.getTileDefinitions());
+        mapLoader.load(mapInputStream);
 
     }
 

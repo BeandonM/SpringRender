@@ -9,7 +9,14 @@ import java.util.Map;
 public class MapLoader implements ResourceLoader {
     private Tile[][] map;
 
-    public void load(InputStream inputStream, Map<Integer, Tile> tileDefinitions) {
+    @Override
+    public void load(InputStream inputStream) {
+        Map<Integer, Tile> tileDefinitions = (Map<Integer, Tile>) ResourceManager.getInstance().getResource("tileDefinitions");
+
+        if (tileDefinitions == null) {
+            throw new IllegalStateException("Tile definitions not loaded.");
+        }
+
         try {
             List<String> lines = new BufferedReader(new InputStreamReader(inputStream)).lines().toList();
             int rows = lines.size();
@@ -31,10 +38,5 @@ public class MapLoader implements ResourceLoader {
 
     public Tile[][] getMap() {
         return map;
-    }
-
-    @Override
-    public void load(InputStream inputStream) {
-        throw new UnsupportedOperationException("Use load(InputStream, Map<Integer, Tile>) instead");
     }
 }
