@@ -12,14 +12,14 @@ public class Tile implements Renderable {
     SpriteRender spriteRender;
     Sprite sprite;
 
-    boolean isWalkable;
+    boolean collision;
 
-    public Tile(Sprite sprite, String state, boolean isWalkable) {
+    public Tile(Sprite sprite, String state, boolean collision) {
         this.sprite = sprite;
 
         spriteRender = new SpriteRender(sprite);
 
-        this.isWalkable = isWalkable;
+        this.collision = collision;
         sprite.setState(state);
     }
 

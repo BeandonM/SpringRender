@@ -4,13 +4,13 @@
       "id": 1,
       "type": "grass",
       "sprite": "/images/player/grass_tile.png",
-      "isWalkable": true
+      "collision": false
     },
     {
       "id": 2,
       "type": "wall",
       "sprite": "/images/player/wall_tile.png",
-      "isWalkable": false
+      "collision": true
     }
   ]
 }
