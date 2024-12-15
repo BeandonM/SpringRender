@@ -6,21 +6,29 @@ import springrender.engine.graphics.Renderable;
 import springrender.engine.rendering.GamePanel;
 
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.image.BufferedImage;
 
 public class Tile implements Renderable {
+
+    private Transform transform;
     SpriteRender spriteRender;
     Sprite sprite;
 
-    boolean collision;
+    boolean isCollidable;
 
-    public Tile(Sprite sprite, String state, boolean collision) {
+    public Tile(Sprite sprite, String state, boolean isCollidable) {
         this.sprite = sprite;
 
         spriteRender = new SpriteRender(sprite);
 
-        this.collision = collision;
+        this.isCollidable = isCollidable;
         sprite.setState(state);
+    }
+
+
+    public boolean isCollidable() {
+        return isCollidable;
     }
 
     public void draw(Graphics2D graphics2D, int x, int y) {

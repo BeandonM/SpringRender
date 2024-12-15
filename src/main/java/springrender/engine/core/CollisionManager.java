@@ -1,32 +1,27 @@
 package springrender.engine.core;
 
+import java.awt.Rectangle;
 import java.util.*;
 
 public class CollisionManager {
 
     private Map<DynamicCollider, Set<Collider>> activeCollisions;
 
-    private List<StaticCollider> staticColliders;
+    private TileManager tileManager;
 
     private List<DynamicCollider> dynamicColliders;
 
-    public CollisionManager() {
+    public CollisionManager(TileManager tileManager) {
+        this.tileManager = tileManager;
         activeCollisions = new HashMap<>();
-        staticColliders = new ArrayList<>();
         dynamicColliders = new ArrayList<>();
     }
 
-    public void addStaticCollider(StaticCollider collider) {
-        staticColliders.add(collider);
-    }
 
     public void addDynamicCollider(DynamicCollider collider) {
         dynamicColliders.add(collider);
     }
 
-    public void removeStaticCollider(StaticCollider collider) {
-        staticColliders.remove(collider);
-    }
 
     public void removeDynamicCollider(DynamicCollider collider) {
         dynamicColliders.remove(collider);
@@ -36,6 +31,11 @@ public class CollisionManager {
         Map<DynamicCollider, Set<Collider>> newCollisions = new HashMap<>();
 
         for (DynamicCollider dynamic : dynamicColliders) {
+            Rectangle dynamicBoundingBox = dynamic.getBoundingBox().getBounds();
+            if (tileManager.checkCollision(dynamicBoundingBox)) {
+                dynamic.resolveCollision(tileManager);
+            }
+            /*
             for (StaticCollider staticCollider : staticColliders) {
                 if (dynamic.isColliding(staticCollider)) {
                     newCollisions.
@@ -47,7 +47,7 @@ public class CollisionManager {
                         !activeCollisions.get(dynamic).contains(staticCollider)) {
                     dynamic.onCollisionEnter(staticCollider);
                 }
-            }
+            }*/
         }
 
         for (int i = 0; i < dynamicColliders.size(); i++) {

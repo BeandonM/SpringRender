@@ -60,4 +60,19 @@ public class DynamicBoxCollider implements DynamicCollider, Transformable {
     public Transform getTransform() {
         return transform;
     }
+
+    @Override
+    public void resolveCollision(Collider other) {
+        if (other instanceof StaticCollider staticCollider) {
+            Rectangle playerBoundingBox = getBoundingBox().getBounds();
+
+            if (staticCollider instanceof TileManager tileManager) {
+                if (tileManager.checkCollision(playerBoundingBox)) {
+                    System.out.println("Player collided with a tile!");
+
+                    //transform.translate(new Vector2D(-5, 0));
+                }
+            }
+        }
+    }
 }

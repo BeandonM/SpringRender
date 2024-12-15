@@ -22,9 +22,9 @@ public class GameApplication {
                 .setGamePanel(gamePanel);
         this.gameWindow = gameWindowFactory.create();
 
-        this.gameManager = new GameManager(gameWindow, gamePanel);
 
         this.tileManager = new TileManager(gamePanel, tileConfig, mapPath);
+        this.gameManager = new GameManager(gameWindow, gamePanel, tileManager);
         gamePanel.setTileManager(tileManager);
     }
 

@@ -37,6 +37,7 @@ public class DemoGame {
                 gameManager.getRenderManager(),
                 gameManager.getInputManager().getInputHandler());
 
+        gameManager.getCollisionManager().addDynamicCollider(player.boxCollider);
         gameManager.getGamePanel().setCamera(camera);
         camera.attachToEntity(player.getTransform());
         camera.setTileManager(gameApp.getTileManager());

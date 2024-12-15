@@ -7,6 +7,8 @@ import springrender.engine.graphics.Sprite;
 import springrender.engine.rendering.GamePanel;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.Shape;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TileManager {
+public class TileManager implements StaticCollider {
     GamePanel gamePanel;
 
     private TileLoader tileLoader;
@@ -49,29 +51,6 @@ public class TileManager {
         }
         mapLoader.load(mapInputStream);
 
-    }
-
-    public void loadTileDefinitions(InputStream inputStream) {
-        try {
-            String jsonString = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-            JSONObject json = new JSONObject(jsonString);
-            JSONArray tiles = json.getJSONArray("tiles");
-
-            for (int i = 0; i < tiles.length(); i++) {
-                JSONObject tileJson = tiles.getJSONObject(i);
-                int id = tileJson.getInt("id");
-                String type = tileJson.getString("type");
-                String spritePath = tileJson.getString("sprite");
-                boolean isWalkable = tileJson.getBoolean("isWalkable");
-
-                Sprite sprite = new Sprite();
-                sprite.loadImage(type, spritePath);
-                tileDefinitions.put(id, new Tile(sprite, type, isWalkable));
-            }
-
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     /*
@@ -168,4 +147,43 @@ public class TileManager {
         // return map.length; // Number of rows
     }
 
+    @Override
+    public Shape getBoundingBox() {
+        return null;
+    }
+
+    @Override
+    public boolean isColliding(Collider other) {
+        return false;
+    }
+
+    @Override
+    public Rectangle getBoundingBoxAt(int x, int y) {
+        return new Rectangle(x * GamePanel.TILE_SIZE, y * GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
+    }
+
+    @Override
+    public boolean isCollidable(int x, int y) {
+        if (x < 0 || y < 0 || x >= getMapWidth() || y >= getMapHeight()) {
+            return false; // Out of bounds, not walkable
+        }
+        Tile tile = mapLoader.getMap()[x][y];
+        return tile != null && tile.isCollidable();
+    }
+
+    public boolean checkCollision(Rectangle dynamicBoundingBox) {
+        // Loop through all tiles and check collision with non-walkable tiles
+        for (int row = 0; row < mapLoader.getMap().length; row++) {
+            for (int col = 0; col < mapLoader.getMap()[row].length; col++) {
+                if (isCollidable(row, col)) {
+                    //System.out.println("HERE");
+                    Rectangle tileBoundingBox = getBoundingBoxAt(row, col);
+                    if (tileBoundingBox.intersects(dynamicBoundingBox)) {
+                        return true; // Collision detected
+                    }
+                }
+            }
+        }
+        return false; // No collision
+    }
 }

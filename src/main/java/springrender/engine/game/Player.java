@@ -9,6 +9,7 @@ import springrender.engine.rendering.GamePanel;
 
 
 import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class Player extends Entity {
@@ -18,9 +19,11 @@ public class Player extends Entity {
     private RenderManager renderManager;
     private InputHandler inputHandler;
 
+    public DynamicBoxCollider boxCollider;
+
     private Camera camera;
 
-    private double moveSpeed = 300; // pixels per second
+    private float moveSpeed = 200; // pixels per second
 
     private int layer;
 
@@ -50,6 +53,7 @@ public class Player extends Entity {
         // this.currentPositionX = 100;
         //this.currentPositionY = 100;
         transform = new Transform(new Vector2D(300f, 300f));
+        boxCollider = new DynamicBoxCollider(transform, 48, 48);
         //previousTransform = transform;
         // this.previousPositionX = 100;
         //this.previousPositionY = 100;
@@ -173,10 +177,12 @@ public class Player extends Entity {
     @Override
     public void draw(Graphics2D graphics2D) {
         BufferedImage image = spriteRender.getCurrentImage();
+
         //System.out.println("Player position: " + transform.getPosition());
         //Vector2D screenPosition = camera.getWorldToScreenCoordinates(transform.getPosition());
         graphics2D.drawImage(image, (int) transform.getPosition().getX(), (int) transform.getPosition().getY(), GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
-
+        Rectangle2D bounds2D = boxCollider.getBoundingBox().getBounds2D();
+        graphics2D.drawRect((int) bounds2D.getX(), (int) bounds2D.getY(), (int) bounds2D.getWidth(), (int) bounds2D.getHeight());
     }
 
     @Override

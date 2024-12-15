@@ -30,11 +30,12 @@ public class TileLoader implements ResourceLoader {
                 int id = tileJson.getInt("id");
                 String type = tileJson.getString("type");
                 String spritePath = tileJson.getString("sprite");
-                boolean collision = tileJson.getBoolean("collision");
+                boolean isCollidable = tileJson.getBoolean("isCollidable");
 
+                System.out.println(isCollidable);
                 Sprite sprite = new Sprite();
                 sprite.loadImage(type, spritePath);
-                tileDefinitions.put(id, new Tile(sprite, type, collision));
+                tileDefinitions.put(id, new Tile(sprite, type, isCollidable));
             }
 
             ResourceManager.getInstance().addResource("tileDefinitions", tileDefinitions);

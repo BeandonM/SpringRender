@@ -15,17 +15,22 @@ public class GameManager implements Updatable, Renderer {
     private RenderManager renderManager;
     private InputManager inputManager;
 
+    private TileManager tileManager;
+
+    private CollisionManager collisionManager;
 
     private GamePanel gamePanel;
 
     private GameWindow gameWindow;
 
-    public GameManager(GameWindow gameWindow, GamePanel gamePanel) {
+    public GameManager(GameWindow gameWindow, GamePanel gamePanel, TileManager tileManager) {
         this.gameWindow = gameWindow;
         this.gamePanel = gamePanel;
         this.updateManager = new UpdateManager();
         this.renderManager = new RenderManager();
         this.inputManager = new InputManager(gamePanel);
+        this.tileManager = tileManager;
+        this.collisionManager = new CollisionManager(this.tileManager);
         gamePanel.setRenderManager(this.renderManager);
     }
 
@@ -62,6 +67,9 @@ public class GameManager implements Updatable, Renderer {
         return renderManager;
     }
 
+    public CollisionManager getCollisionManager() {
+        return collisionManager;
+    }
 
     public void interpolate(double alpha) {
         //for (Renderable renderable : renderManager) {
@@ -72,6 +80,7 @@ public class GameManager implements Updatable, Renderer {
     @Override
     public void update(double deltaTime) {
         updateManager.updateAll(deltaTime);
+        collisionManager.checkCollisions();
     }
 
     @Override
