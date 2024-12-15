@@ -73,7 +73,7 @@ public class GamePanel extends JPanel {
 
             //g2.translate(-cameraOffset.getX(), -cameraOffset.getY());
             if (tileManager != null) {
-                tileManager.renderMap(g2);
+                tileManager.renderMapRelativeToCamera(g2, camera);
             }
             // Render other game objects through the camera
             if (renderManager != null) {

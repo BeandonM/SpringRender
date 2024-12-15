@@ -132,10 +132,22 @@ public class TileManager {
     }
 
      */
-    public void renderMap(Graphics2D g) {
+    public void renderMapRelativeToCamera(Graphics2D g, Camera camera) {
+        // Get camera position
+        Vector2D cameraPosition = camera.getTransform().getPosition();
+        float cameraX = cameraPosition.getX();
+        float cameraY = cameraPosition.getY();
+
+        // Calculate visible tiles based on camera position
+        int startCol = Math.max(0, (int) (cameraX / GamePanel.TILE_SIZE));
+        int startRow = Math.max(0, (int) (cameraY / GamePanel.TILE_SIZE));
+
+        int endCol = Math.min(getMapWidth(), startCol + (int) (camera.viewportWidth / GamePanel.TILE_SIZE) + 1);
+        int endRow = Math.min(getMapHeight(), startRow + (int) (camera.viewportHeight / GamePanel.TILE_SIZE) + 1);
+
         Tile[][] map = mapLoader.getMap();
-        for (int row = 0; row < map.length; row++) {
-            for (int col = 0; col < map[row].length; col++) {
+        for (int row = startRow; row < endRow; row++) {
+            for (int col = startCol; col < endCol; col++) {
                 Tile tile = map[row][col];
                 if (tile != null) {
                     int x = col * GamePanel.TILE_SIZE;
