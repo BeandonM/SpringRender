@@ -21,9 +21,11 @@ import java.util.Map;
 public class TileManager {
     GamePanel gamePanel;
 
+    private TileLoader tileLoader;
+    private MapLoader mapLoader;
+
     private Map<Integer, Tile> tileDefinitions;
 
-    private Tile[][] map;
 
     // Sprite tileSpriteSheet;
     //Tile[] tile;
@@ -31,19 +33,21 @@ public class TileManager {
     public TileManager(GamePanel gamePanel, String tileConfigPath, String mapPath) {
         this.gamePanel = gamePanel;
         this.tileDefinitions = new HashMap<>();
-        // Load tile definitions
+        tileLoader = new TileLoader();
+        mapLoader = new MapLoader();
+
         InputStream tilesInputStream = getClass().getResourceAsStream(tileConfigPath);
         if (tilesInputStream == null) {
             throw new IllegalArgumentException("Tile file not found: " + tileConfigPath);
         }
 
-        // Load map layout
+        tileLoader.load(tilesInputStream);
+
         InputStream mapInputStream = getClass().getResourceAsStream(mapPath);
         if (mapInputStream == null) {
             throw new IllegalArgumentException("Map file not found: " + mapPath);
         }
-        loadTileDefinitions(tilesInputStream);
-        loadMap(mapInputStream);
+        mapLoader.load(mapInputStream, tileLoader.getTileDefinitions());
 
     }
 
@@ -70,6 +74,7 @@ public class TileManager {
         }
     }
 
+    /*
     public void loadMap(InputStream inputStream) {
         try {
             List<String> lines = new BufferedReader(new InputStreamReader(inputStream)).lines().toList();
@@ -91,6 +96,7 @@ public class TileManager {
         }
 
     }
+*/
 
     /**
      * Renders the map relative to the camera's position.
@@ -98,6 +104,7 @@ public class TileManager {
      * @param g2     The graphics context.
      * @param camera The camera to base rendering on.
      */
+    /*
     public void renderMapRelativeToCamera(Graphics2D g2, Camera camera) {
         // Get camera position
         Vector2D cameraPosition = camera.getTransform().getPosition();
@@ -124,7 +131,9 @@ public class TileManager {
         }
     }
 
+     */
     public void renderMap(Graphics2D g) {
+        Tile[][] map = mapLoader.getMap();
         for (int row = 0; row < map.length; row++) {
             for (int col = 0; col < map[row].length; col++) {
                 Tile tile = map[row][col];
@@ -138,20 +147,13 @@ public class TileManager {
     }
 
     public int getMapWidth() {
-        return map[0].length; // Number of columns
+        return mapLoader.getMap()[0].length;
+        // return map[0].length; // Number of columns
     }
 
     public int getMapHeight() {
-        return map.length; // Number of rows
+        return mapLoader.getMap().length;
+        // return map.length; // Number of rows
     }
-
-/*
-    public void initializeTileSprite() {
-        tileSpriteSheet = new Sprite();
-        tileSpriteSheet.loadImage("grass", "/images/player/grass_tile.png");
-        tileSpriteSheet.loadImage("wall", "/images/player/wall_tile.png");
-    }
-
- */
 
 }
