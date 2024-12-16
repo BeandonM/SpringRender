@@ -34,7 +34,7 @@ public class DemoGame {
         );
         Player player = new Player(
                 gameManager.getUpdateManager(),
-                gameManager.getRenderManager(),
+                gameManager.getRenderManager(), gameManager.getCollisionManager(),
                 gameManager.getInputManager().getInputHandler());
 
         gameManager.getCollisionManager().addDynamicCollider(player.boxCollider);

@@ -9,6 +9,7 @@ import springrender.engine.rendering.GamePanel;
 
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
@@ -19,11 +20,13 @@ public class Player extends Entity {
     private RenderManager renderManager;
     private InputHandler inputHandler;
 
+    private CollisionManager collisionManager;
+
     public DynamicBoxCollider boxCollider;
 
     private Camera camera;
 
-    private float moveSpeed = 200; // pixels per second
+    private float moveSpeed = 3; // pixels per second
 
     private int layer;
 
@@ -31,23 +34,18 @@ public class Player extends Entity {
     private Sprite sprite;
 
     private String direction = "down";
+
     // Player positions
 
-    //private Transform transform;
-
-    private Vector2D previousTransform;
-    private double previousPositionX;
-    private double previousPositionY;
-    private double currentPositionX;
-    private double currentPositionY;
 
     // Interpolated render positions
     private double renderX;
     private double renderY;
 
-    public Player(UpdateManager updateManager, RenderManager renderManager, InputHandler inputHandler) {
+    public Player(UpdateManager updateManager, RenderManager renderManager, CollisionManager collisionManager, InputHandler inputHandler) {
         this.updateManager = updateManager;
         this.renderManager = renderManager;
+        this.collisionManager = collisionManager;
         this.inputHandler = inputHandler;
         initializeSprite();
         // this.currentPositionX = 100;
@@ -96,62 +94,87 @@ public class Player extends Entity {
      */
     @Override
     public void update(double dt) {
-        //System.out.println("player update");
-        // Store the previous position before updating
-        //previousTransform = transform;
-        previousPositionX = currentPositionX;
-        previousPositionY = currentPositionY;
-
         float moveAmount = (float) (moveSpeed * dt);
         Vector2D moveVector = Vector2D.ZERO;
-        //System.out.println(moveAmount);
         boolean moving = false;
+
         if (inputHandler.isUpPressed()) {
-            moveVector = moveVector.add(Vector2D.UP.multiply(moveAmount));
+            moveVector = moveVector.add(Vector2D.UP);
             direction = "up";
-            //transform.translate(); transform.add(new Vector2D(0f, -moveAmount));
-            currentPositionY -= moveAmount;
             moving = true;
         }
         if (inputHandler.isDownPressed()) {
-            moveVector = moveVector.add(Vector2D.DOWN.multiply(moveAmount));
+            moveVector = moveVector.add(Vector2D.DOWN);
             direction = "down";
-            //transform = transform.add(new Vector2D(0f, moveAmount));
-            currentPositionY += moveAmount;
-            //System.out.println(currentPositionY);
             moving = true;
         }
         if (inputHandler.isLeftPressed()) {
-            moveVector = moveVector.add(Vector2D.LEFT.multiply(moveAmount));
-            //transform = transform.add(new Vector2D(-moveAmount, 0f));
+            moveVector = moveVector.add(Vector2D.LEFT);
             direction = "left";
-            currentPositionX -= moveAmount;
             moving = true;
         }
         if (inputHandler.isRightPressed()) {
-            moveVector = moveVector.add(Vector2D.RIGHT.multiply(moveAmount));
+            moveVector = moveVector.add(Vector2D.RIGHT);
             direction = "right";
-            //transform = transform.add(new Vector2D(moveAmount, 0f));
-            currentPositionX += moveAmount;
             moving = true;
         }
-        transform.translate(moveVector);
+        moveVector = moveVector.normalize().multiply(moveSpeed);
 
-        // Add boundary checks to prevent the player from moving out of the screen
-        //currentPositionX = Math.max(0, Math.min(currentPositionX, gamePanel.getWidth() - GamePanel.TILE_SIZE));
-        //currentPositionY = Math.max(0, Math.min(currentPositionY, gamePanel.getHeight() - GamePanel.TILE_SIZE));
+        // Split movement into X and Y components for independent collision checks
+        Vector2D futurePositionX = new Vector2D(transform.getPosition().getX() + moveVector.getX(), transform.getPosition().getY());
+        Vector2D futurePositionY = new Vector2D(transform.getPosition().getX(), transform.getPosition().getY() + moveVector.getY());
+
+        // Check X-axis collision
+        Rectangle futureBoundingBoxX = new Rectangle(
+                (int) futurePositionX.getX(),
+                (int) futurePositionX.getY(),
+                boxCollider.getBoundingBox().getBounds().width,
+                boxCollider.getBoundingBox().getBounds().height
+        );
+        if (collisionManager.isValidMove(futureBoundingBoxX)) {
+            transform.translate(new Vector2D(moveVector.getX(), 0));
+        }
+
+        // Check Y-axis collision
+        Rectangle futureBoundingBoxY = new Rectangle(
+                (int) futurePositionY.getX(),
+                (int) futurePositionY.getY(),
+                boxCollider.getBoundingBox().getBounds().width,
+                boxCollider.getBoundingBox().getBounds().height
+        );
+        if (collisionManager.isValidMove(futureBoundingBoxY)) {
+            transform.translate(new Vector2D(0, moveVector.getY()));
+        }
+
         String state = direction;
         if (moving) {
             state += "_move";
-            //sprite.update(dt);
         } else {
             state += "_idle";
-            // Optionally set to a default standing frame
-            //sprite.setState("idle_" + direction);
         }
         spriteRender.setState(state);
-        //System.out.println("Player position: " + transform.getPosition());
     }
+
+    /*
+    private boolean canMove(Vector2D futurePosition) {
+        // Get bounding box for the player's future position
+        Rectangle futureBoundingBox = new Rectangle(
+                (int) futurePosition.getX(),
+                (int) futurePosition.getY(),
+                boxCollider.getBoundingBox().getBounds().width,
+                boxCollider.getBoundingBox().getBounds().height
+        );
+
+        // Check collisions using CollisionManager
+        for (StaticCollider collider : collisionManager.getStaticColliders()) {
+            if (futureBoundingBox.intersects(collider.getBoundingBox().getBounds())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+     */
 
     /**
      * Interpolates the player's position for smooth rendering.
@@ -159,9 +182,9 @@ public class Player extends Entity {
      * @param alpha The interpolation factor between 0 and 1.
      */
     public void interpolate(double alpha) {
-        alpha = 0;
-        renderX = previousPositionX * (1.0 - alpha) + currentPositionX * alpha;
-        renderY = previousPositionY * (1.0 - alpha) + currentPositionY * alpha;
+        //alpha = 0;
+        //renderX = previousPositionX * (1.0 - alpha) + currentPositionX * alpha;
+        //renderY = previousPositionY * (1.0 - alpha) + currentPositionY * alpha;
     }
 
     @Override
@@ -188,14 +211,6 @@ public class Player extends Entity {
     @Override
     public int getLayer() {
         return layer;
-    }
-
-    public double getCurrentPositionX() {
-        return currentPositionX;
-    }
-
-    public double getCurrentPositionY() {
-        return currentPositionY;
     }
 
     public void setCamera(Camera camera) {

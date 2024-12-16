@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TileManager implements StaticCollider {
+public class TileManager {
     GamePanel gamePanel;
 
     private TileLoader tileLoader;
@@ -147,43 +147,10 @@ public class TileManager implements StaticCollider {
         // return map.length; // Number of rows
     }
 
-    @Override
-    public Shape getBoundingBox() {
-        return null;
-    }
-
-    @Override
-    public boolean isColliding(Collider other) {
-        return false;
-    }
-
-    @Override
-    public Rectangle getBoundingBoxAt(int x, int y) {
-        return new Rectangle(x * GamePanel.TILE_SIZE, y * GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
-    }
-
-    @Override
-    public boolean isCollidable(int x, int y) {
-        if (x < 0 || y < 0 || x >= getMapWidth() || y >= getMapHeight()) {
-            return false; // Out of bounds, not walkable
+    public Tile getTileAt(int row, int col) {
+        if (row < 0 || col < 0 || row >= mapLoader.getMap().length || col >= mapLoader.getMap()[0].length) {
+            return null; // Out of bounds
         }
-        Tile tile = mapLoader.getMap()[x][y];
-        return tile != null && tile.isCollidable();
-    }
-
-    public boolean checkCollision(Rectangle dynamicBoundingBox) {
-        // Loop through all tiles and check collision with non-walkable tiles
-        for (int row = 0; row < mapLoader.getMap().length; row++) {
-            for (int col = 0; col < mapLoader.getMap()[row].length; col++) {
-                if (isCollidable(row, col)) {
-                    //System.out.println("HERE");
-                    Rectangle tileBoundingBox = getBoundingBoxAt(row, col);
-                    if (tileBoundingBox.intersects(dynamicBoundingBox)) {
-                        return true; // Collision detected
-                    }
-                }
-            }
-        }
-        return false; // No collision
+        return mapLoader.getMap()[row][col];
     }
 }
