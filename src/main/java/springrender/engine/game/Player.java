@@ -26,7 +26,7 @@ public class Player extends Entity {
 
     private Camera camera;
 
-    private float moveSpeed = 3; // pixels per second
+    private float moveSpeed = 200; // pixels per second
 
     private int layer;
 
@@ -35,12 +35,6 @@ public class Player extends Entity {
 
     private String direction = "down";
 
-    // Player positions
-
-
-    // Interpolated render positions
-    private double renderX;
-    private double renderY;
 
     public Player(UpdateManager updateManager, RenderManager renderManager, CollisionManager collisionManager, InputHandler inputHandler) {
         this.updateManager = updateManager;
@@ -48,13 +42,8 @@ public class Player extends Entity {
         this.collisionManager = collisionManager;
         this.inputHandler = inputHandler;
         initializeSprite();
-        // this.currentPositionX = 100;
-        //this.currentPositionY = 100;
         transform = new Transform(new Vector2D(300f, 300f));
         boxCollider = new DynamicBoxCollider(transform, 48, 48);
-        //previousTransform = transform;
-        // this.previousPositionX = 100;
-        //this.previousPositionY = 100;
         updateManager.addUpdatable(this);
         renderManager.addRenderable(this);
         this.layer = 2;
@@ -95,30 +84,26 @@ public class Player extends Entity {
     @Override
     public void update(double dt) {
         float moveAmount = (float) (moveSpeed * dt);
-        Vector2D moveVector = Vector2D.ZERO;
+        Vector2D moveVector = handleInput();
         boolean moving = false;
 
         if (inputHandler.isUpPressed()) {
-            moveVector = moveVector.add(Vector2D.UP);
             direction = "up";
             moving = true;
         }
         if (inputHandler.isDownPressed()) {
-            moveVector = moveVector.add(Vector2D.DOWN);
             direction = "down";
             moving = true;
         }
         if (inputHandler.isLeftPressed()) {
-            moveVector = moveVector.add(Vector2D.LEFT);
             direction = "left";
             moving = true;
         }
         if (inputHandler.isRightPressed()) {
-            moveVector = moveVector.add(Vector2D.RIGHT);
             direction = "right";
             moving = true;
         }
-        moveVector = moveVector.normalize().multiply(moveSpeed);
+        moveVector = moveVector.normalize().multiply(moveAmount);
 
         // Split movement into X and Y components for independent collision checks
         Vector2D futurePositionX = new Vector2D(transform.getPosition().getX() + moveVector.getX(), transform.getPosition().getY());
@@ -155,26 +140,29 @@ public class Player extends Entity {
         spriteRender.setState(state);
     }
 
-    /*
-    private boolean canMove(Vector2D futurePosition) {
-        // Get bounding box for the player's future position
-        Rectangle futureBoundingBox = new Rectangle(
-                (int) futurePosition.getX(),
-                (int) futurePosition.getY(),
-                boxCollider.getBoundingBox().getBounds().width,
-                boxCollider.getBoundingBox().getBounds().height
-        );
-
-        // Check collisions using CollisionManager
-        for (StaticCollider collider : collisionManager.getStaticColliders()) {
-            if (futureBoundingBox.intersects(collider.getBoundingBox().getBounds())) {
-                return false;
-            }
-        }
-        return true;
-    }
-
+    /**
+     * Handles players input
+     *
+     * @param dt
+     * @return
      */
+    private Vector2D handleInput() {
+        Vector2D moveVector = Vector2D.ZERO;
+
+        if (inputHandler.isUpPressed()) {
+            moveVector = moveVector.add(Vector2D.UP);
+        }
+        if (inputHandler.isDownPressed()) {
+            moveVector = moveVector.add(Vector2D.DOWN);
+        }
+        if (inputHandler.isLeftPressed()) {
+            moveVector = moveVector.add(Vector2D.LEFT);
+        }
+        if (inputHandler.isRightPressed()) {
+            moveVector = moveVector.add(Vector2D.RIGHT);
+        }
+        return moveVector;
+    }
 
     /**
      * Interpolates the player's position for smooth rendering.
