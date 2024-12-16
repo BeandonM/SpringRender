@@ -143,7 +143,6 @@ public class Player extends Entity {
     /**
      * Handles players input
      *
-     * @param dt
      * @return
      */
     private Vector2D handleInput() {
