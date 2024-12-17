@@ -30,6 +30,17 @@ public final class Vector2D {
      * @param x The x-component.
      * @param y The y-component.
      */
+    public Vector2D(int x, int y) {
+        this.x = (float) x;
+        this.y = (float) y;
+    }
+
+    /**
+     * Constructs a vector with specified x and y components.
+     *
+     * @param x The x-component.
+     * @param y The y-component.
+     */
     public Vector2D(float x, float y) {
         this.x = x;
         this.y = y;
@@ -169,7 +180,7 @@ public final class Vector2D {
         float deltaY = v1.y - v2.y;
         return (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     }
-    
+
     @Override
     public String toString() {
         return "(" + x + ", " + y + ")";

@@ -42,15 +42,11 @@ public class CollisionManager {
             for (int row = startRow; row <= endRow; row++) {
                 for (int col = startCol; col <= endCol; col++) {
                     Tile tile = tileManager.getTileAt(row, col);
+                    StaticBoxCollider tileCollider = new StaticBoxCollider(new Transform(new Vector2D(col * GamePanel.TILE_SIZE, row * GamePanel.TILE_SIZE)), GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
                     if (tile != null && tile.isCollidable()) {
-                        Rectangle tileBounds = new Rectangle(
-                                col * GamePanel.TILE_SIZE,
-                                row * GamePanel.TILE_SIZE,
-                                GamePanel.TILE_SIZE,
-                                GamePanel.TILE_SIZE
-                        );
+                        Rectangle tileBounds = tileCollider.getBoundingBox().getBounds();
                         if (dynamicBounds.intersects(tileBounds)) {
-                            System.out.println("TILE Collision");
+                            dynamicCollider.resolveCollision(tileCollider);
                         }
                     }
                 }

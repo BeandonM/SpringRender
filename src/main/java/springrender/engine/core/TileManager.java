@@ -27,10 +27,7 @@ public class TileManager {
     private MapLoader mapLoader;
 
     private Map<Integer, Tile> tileDefinitions;
-
-
-    // Sprite tileSpriteSheet;
-    //Tile[] tile;
+    
 
     public TileManager(GamePanel gamePanel, String tileConfigPath, String mapPath) {
         this.gamePanel = gamePanel;
@@ -53,64 +50,6 @@ public class TileManager {
 
     }
 
-    /*
-    public void loadMap(InputStream inputStream) {
-        try {
-            List<String> lines = new BufferedReader(new InputStreamReader(inputStream)).lines().toList();
-            int rows = lines.size();
-            int cols = lines.get(0).split(" ").length;
-
-            map = new Tile[rows][cols];
-
-            for (int row = 0; row < rows; row++) {
-                String[] tokens = lines.get(row).split(" ");
-                for (int col = 0; col < tokens.length; col++) {
-                    int tileId = Integer.parseInt(tokens[col]);
-                    map[row][col] = tileDefinitions.get(tileId);
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-*/
-
-    /**
-     * Renders the map relative to the camera's position.
-     *
-     * @param g2     The graphics context.
-     * @param camera The camera to base rendering on.
-     */
-    /*
-    public void renderMapRelativeToCamera(Graphics2D g2, Camera camera) {
-        // Get camera position
-        Vector2D cameraPosition = camera.getTransform().getPosition();
-        float cameraX = cameraPosition.getX();
-        float cameraY = cameraPosition.getY();
-
-        // Calculate visible tiles based on camera position
-        int startCol = Math.max(0, (int) (cameraX / GamePanel.TILE_SIZE));
-        int startRow = Math.max(0, (int) (cameraY / GamePanel.TILE_SIZE));
-
-        int endCol = Math.min(map[0].length, startCol + (int) (camera.viewportWidth / GamePanel.TILE_SIZE) + 1);
-        int endRow = Math.min(map.length, startRow + (int) (camera.viewportHeight / GamePanel.TILE_SIZE) + 1);
-
-        // Render visible tiles
-        for (int row = startRow; row < endRow; row++) {
-            for (int col = startCol; col < endCol; col++) {
-                Tile tile = map[row][col];
-                if (tile != null) {
-                    int screenX = (col * GamePanel.TILE_SIZE) - (int) cameraX;
-                    int screenY = (row * GamePanel.TILE_SIZE) - (int) cameraY;
-                    tile.draw(g2, screenX, screenY);
-                }
-            }
-        }
-    }
-
-     */
     public void renderMapRelativeToCamera(Graphics2D g, Camera camera) {
         // Get camera position
         Vector2D cameraPosition = camera.getTransform().getPosition();
